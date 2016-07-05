@@ -1,0 +1,32 @@
+{# extends 'base.html.twig' #}
+{% extends "ResumeBundle:Default:panel-layout.html.twig" %}
+
+{% block maincontent %}
+    <h1>Especialidades Docentes</h1>
+    <hr>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for speciality in specialities %}
+            <tr>
+                <td><a href="{{ path('panel_speciality_show', { 'id': speciality.id }) }}">{{ speciality.id }}</a></td>
+                <td>{{ speciality.name }}</td>
+                <td>
+                    <a class="btn btn-default" href="{{ path('panel_speciality_edit', { 'id': speciality.id }) }}">Editar</a>
+                </td>
+            </tr>
+        {% endfor %}
+            <tr>
+              <td colspan="3">
+                <a class="btn btn-default" href="{{ path('panel_speciality_new') }}">Nuevo</a>
+              </td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

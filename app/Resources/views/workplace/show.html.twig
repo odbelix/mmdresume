@@ -1,0 +1,32 @@
+{# extends 'base.html.twig' #}
+{% extends "ResumeBundle:Default:panel-layout.html.twig" %}
+
+{% block maincontent %}
+    <h1>Lugar de trabajo</h1>
+    <hr>
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ workplace.name }}</td>
+            </tr>
+            <tr>
+                <th>Dirección</th>
+                <td>{{ workplace.address }}</td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <div class="btn-group button-in-table" role="group" aria-label="...">
+                    <a class="btn btn-default"  href="{{ path('panel_workplace_index') }}">Volver</a>
+                    <a class="btn btn-default" href="{{ path('panel_workplace_edit', { 'id': workplace.id }) }}">Editar</a>
+                </div>
+              </td>
+            </tr>
+        </tbody>
+    </table>
+    <hr>
+    {{ form_start(delete_form) }}
+    <input class="btn btn-danger" type="submit" value="Eliminar">
+    {{ form_end(delete_form) }}
+
+{% endblock %}

@@ -1,0 +1,69 @@
+{# extends 'base.html.twig' #}
+{% extends "ResumeBundle:Default:panel-layout.html.twig" %}
+{% block maincontent %}
+
+    <h1>Editando Trabajo</h1>
+    <hr>
+    {{ form_start(edit_form) }}
+    <table class="table table-bordered table-hover">
+        <tbody>
+          <tr>
+            <th>Nombre</th>
+            <td><p class="text-danger">{{ form_errors(edit_form.name) }}</p>
+                {{ form_widget(edit_form.name) }}
+                </td>
+          </tr>
+          <tr>
+            <th>Detalle</th>
+            <td><p class="text-danger">{{ form_errors(edit_form.detail) }}</p>
+	{{ form_widget(edit_form.detail) }}</td>
+          </tr>
+          <tr>
+            <th>Fecha Inicio</th>
+            <td><p class="text-danger">{{ form_errors(edit_form.startjob) }}</p>
+	{{ form_widget(edit_form.startjob) }}</td>
+          </tr>
+          <tr>
+            <th>Fecha Termino</th>
+            <td><p class="text-danger">{{ form_errors(edit_form.endjob) }}</p>
+	{{ form_widget(edit_form.endjob) }}</td>
+          </tr>
+          <tr>
+            <th>Horas</th>
+            <td><p class="text-danger">{{ form_errors(edit_form.hours) }}</p>
+	{{ form_widget(edit_form.hours) }}</td>
+          </tr>
+          <tr>
+            <th>Especialidad</th>
+            <td><p class="text-danger">{{ form_errors(edit_form.speciality) }}</p>
+	{{ form_widget(edit_form.speciality) }}</td>
+          </tr>
+          <tr>
+            <th>Establecimiento</th>
+            <td><p class="text-danger">{{ form_errors(edit_form.workplace) }}</p>
+	{{ form_widget(edit_form.workplace) }}
+</td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <div class="btn-group button-in-table" role="group" aria-label="...">
+                <a class="btn btn-default" href="{{ path('panel_job_index') }}">Volver</a>
+                <input class="btn btn-default" type="submit" value="Editar" />
+              </div>
+            </td>
+          </tr>
+        </tbody>
+    </table>
+    <div class="hidden">
+      {{form_widget(edit_form.username)}}
+    </div>
+    {{ form_end(edit_form) }}
+
+    <ul>
+        <li>
+            {{ form_start(delete_form) }}
+                <input class="btn btn-danger" type="submit" value="Eliminar">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

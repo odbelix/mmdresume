@@ -1,0 +1,75 @@
+{% extends "ResumeBundle:Default:panel-layout.html.twig" %}
+
+{% block maincontent %}
+          {% if user.firstname is empty %}
+              <h1>Hola, {{user.username}}</h1>
+          {% else %}
+              <h1>Hola, {{user.firstname}}</h1>
+          {% endif %}
+          <hr>
+        <table class="table table-bordered table-hover">
+          <tr>
+            <th colspan="2">Información Personal</th>
+          </tr>
+          <tr>
+            <th>Primer Nombre</th>
+            <td>{{user.firstname}}</td>
+          </tr>
+          <tr>
+            <th>Segundo Nombre</th>
+            <td>{{user.middlename}}</td>
+          </tr>
+          <tr>
+            <th>Apellido Paterno</th>
+            <td>{{user.lastname}}</td>
+          </tr>
+          <tr>
+            <th>Apellido Materno</th>
+            <td>{{user.momlastname}}</td>
+          </tr>
+          <tr>
+            <th>Genero</th>
+            <td>{{user.gender}}</td>
+          </tr>
+          <tr>
+            <th>Fecha de nacimiento</th>
+            <td>{{user.birthdate|date("d-M-Y")}}</td>
+          </tr>
+          <tr>
+            <th colspan="2">Información de Contacto</th>
+          </tr>
+          <tr>
+            <th>Correo</th>
+            <td>{{user.email}}</td>
+          </tr>
+          <tr>
+            <th>Teléfono</th>
+            <td>{{user.phone}}</td>
+          </tr>
+          <tr>
+            <th>Celular</th>
+            <td>{{user.celphone}}</td>
+          </tr>
+          <tr>
+            <th colspan="2">Localización</th>
+          </tr>
+          <tr>
+            <th>Dirección</th>
+            <td>{{user.address}}</td>
+          </tr>
+          <tr>
+            <th>Ciudad</th>
+            <td>{{user.city}}</td>
+          </tr>
+          <tr>
+            <th colspan="2">
+              <div class="btn-group button-in-table" role="group" aria-label="...">
+                <a class="btn btn-default" href="{{path('resume_profile_edit')}}">Editar Perfil</a>
+                <a class="btn btn-default" href="{{path('fos_user_profile_edit')}}">Editar Información de Acceso</a>
+                <a class="btn btn-danger" href="{{path('resume_profile_cancel')}}">Dar de Baja</a>
+              </div>
+            </th>
+          </tr>
+        </table>
+
+{% endblock %}

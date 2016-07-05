@@ -1,0 +1,33 @@
+{# extends 'base.html.twig' #}
+{% extends "ResumeBundle:Default:panel-layout.html.twig" %}
+
+{% block maincontent %}
+    <h1>Lista de Lugares de Trabajo</h1>
+    <hr>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for workplace in workplaces %}
+            <tr>
+                <td><a href="{{ path('panel_workplace_show', { 'id': workplace.id }) }}">{{ workplace.id }}</a></td>
+                <td>{{ workplace.name }}</td>
+                <td>{{ workplace.address }}</td>
+                <td>
+                  <a class="btn btn-default" href="{{ path('panel_workplace_edit', { 'id': workplace.id }) }}">Editar</a>
+                </td>
+            </tr>
+        {% endfor %}
+        <tr>
+          <td colspan="4"><a class="btn btn-default" href="{{ path('panel_workplace_new') }}">Agregar nuevo Lugar</a></td>
+        </tr>
+        </tbody>
+    </table>
+
+{% endblock %}

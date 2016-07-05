@@ -1,0 +1,31 @@
+{% extends "ResumeBundle:Default:panel-layout.html.twig" %}
+
+{% block maincontent %}
+          {% if user.firstname is empty %}
+              <h1>Hola, {{user.username}}</h1>
+          {% else %}
+              <h1>Hola, {{user.firstname}}</h1>
+          {% endif %}
+          <hr>
+          <!-- MESSAGE  CONSTRUCTION -->
+        <table class="tabla table-bordered table-hover">
+          <tr>
+            <th colspan="2"><p class="button-in-table">Importante</p></th>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <p class="text-in-table">Dar de baja una cuenta involucra desvincularse del portal y
+              no pertenecer a la lista de Docentes disponibles para ofertas laborales.</p>
+            </td>
+          </tr>
+
+          <tr>
+            <th colspan="2">
+              <div class="btn-group button-in-table" role="group" aria-label="...">
+                <input type="button" class="btn btn-danger" value="Dar de Baja">
+              </div>
+            </th>
+          </tr>
+        </table>
+
+{% endblock %}

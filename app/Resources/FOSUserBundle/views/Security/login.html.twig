@@ -1,0 +1,37 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+
+<div class="form-group">
+{% if error %}
+    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+{% endif %}
+<form action="{{ path("fos_user_security_check") }}" method="post" class="form-signin">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+
+    <input class="form-control" type="text" id="username" name="_username" value="{{ last_username }}" required="required" placeholder="{{ 'security.login.username'|trans }} " />
+    <input class="form-control" type="password" id="password" name="_password" required="required" placeholder="{{ 'security.login.password'|trans }}" />
+
+    <!-- <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+    <label for="remember_me">{{ 'security.login.remember_me'|trans }}</label> -->
+    <input class="btn btn-default form-control" type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />
+</form>
+</div>
+<hr>
+<div class="form-group">
+  <div class="form-signin">
+    <label>¿Aun no estas registrado?</label>
+    <a class="btn btn-default form-control" href="{{path('fos_user_registration_register')}}">Registrate aqu&iacute;</a>
+  </div>
+</div>
+<div class="form-group">
+  <div class="form-signin">
+    <label>¿Olvidaste tu contraseña?</label>
+    <a class="btn btn-default form-control" href="{{path('fos_user_resetting_request')}}">Recuperar contraseña</a>
+  </div>
+</div>
+
+
+{% endblock fos_user_content %}

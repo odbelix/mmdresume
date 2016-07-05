@@ -1,0 +1,37 @@
+# Empty CSS file for your own CSS
+body {
+  margin:0;
+  font-family: monospace;
+}
+.container-fluid {
+  padding: 20px;
+}
+
+.panel-footer a:hover {
+  text-decoration: none;
+}
+.panel-title a:hover {
+  text-decoration: none;
+}
+.panel-body a:hover {
+  text-decoration: none;
+}
+
+.panel-body .list-group .active a {
+  text-decoration: none;
+  color:white;
+}
+.panel-body .list-group a {
+  text-decoration: none;
+  color:black;
+}
+.panel-body .list-group a:hover {
+  text-decoration: none;
+}
+
+.textbox {
+  width: 500px;
+}
+.btn-group-wrap {
+    text-align: center;
+}

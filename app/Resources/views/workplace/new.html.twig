@@ -1,0 +1,32 @@
+{# extends 'base.html.twig' #}
+{% extends "ResumeBundle:Default:panel-layout.html.twig" %}
+{% block maincontent %}
+    <h1>Nuevo lugar de trabajo</h1>
+    <hr>
+    {{ form_start(form) }}
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <th>Nombre</th>
+          <td>{{ form_errors(form.name) }}
+          {{ form_widget(form.name, { 'attr': {'class': 'form-control'} }) }}</td>
+        </tr>
+        <tr>
+          <th>Dirección</th>
+          <td>{{ form_errors(form.address) }}
+          {{ form_widget(form.address, { 'attr': {'class': 'form-control'} }) }}</td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <input class="btn btn-default" type="submit" value="Agregar" />
+          </td>
+        </tr>
+        </tbody>
+    </table>
+    {{ form_end(form) }}
+    <ul>
+        <li>
+            <a class="btn btn-default" href="{{ path('panel_workplace_index') }}">Volver</a>
+        </li>
+    </ul>
+{% endblock %}

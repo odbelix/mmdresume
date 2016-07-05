@@ -1,0 +1,28 @@
+{# extends 'base.html.twig' #}
+{% extends "ResumeBundle:Default:panel-layout.html.twig" %}
+{% block maincontent %}
+    <h1>Editando Especialidad</h1>
+    <hr>
+    {{ form_start(edit_form) }}
+    <table class="table table-bordered">
+      <tbody>
+      <tr>
+        <th>{{ form_label(edit_form.name) }}</th>
+        <td>{{ form_errors(edit_form.name) }}
+        {{ form_widget(edit_form.name, { 'attr': {'class': 'form-control'} }) }}</td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <input class="btn btn-default" type="submit" value="Editar" />
+          <a class="btn btn-default" href="{{ path('panel_speciality_index') }}">Volver</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    {{ form_end(edit_form) }}
+
+    <hr>
+    {{ form_start(delete_form) }}
+      <input class="btn btn-danger" type="submit" value="Eliminar">
+    {{ form_end(delete_form) }}
+{% endblock %}

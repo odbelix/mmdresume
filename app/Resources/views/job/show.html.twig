@@ -1,0 +1,50 @@
+{% extends "ResumeBundle:Default:panel-layout.html.twig" %}
+{% block maincontent %}
+
+    <h1>Trabajo</h1>
+    <hr>
+    <table class="table table-bordered table-hover">
+        <tbody>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ job.name }}</td>
+            </tr>
+            <tr>
+                <th>Detalle/Descripción</th>
+                <td>{{ job.detail }}</td>
+            </tr>
+            <tr>
+                <th>Fecha de Inicio</th>
+                <td>{% if job.startjob %}{{ job.startjob|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fecha de Termino</th>
+                <td>{% if job.endjob %}{{ job.endjob|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Horas</th>
+                <td>{{ job.hours }}</td>
+            </tr>
+            <tr>
+                <th>Creado por</th>
+                <td>{{ job.username }}</td>
+            </tr>
+            <tr>
+                <th colspan="2">
+                  <div class="btn-group button-in-table" role="group" aria-label="...">
+                    <a class="btn btn-default" href="{{ path('panel_job_index') }}">Volver</a>
+                    <a class="btn btn-default" href="{{ path('panel_job_edit', { 'id': job.id }) }}">Editar</a>
+                  </div>
+                </th>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            {{ form_start(delete_form) }}
+                <input class="btn btn-danger" type="submit" value="Eliminar">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

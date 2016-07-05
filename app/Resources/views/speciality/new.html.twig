@@ -1,0 +1,29 @@
+{# extends 'base.html.twig' #}
+{% extends "ResumeBundle:Default:panel-layout.html.twig" %}
+
+{% block maincontent %}
+    <h1>Nueva Especialidad</h1>
+    <hr>
+    {{ form_start(form) }}
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <th>Nombre</th>
+          <td> {{ form_errors(form.name) }}
+               {{ form_widget(form.name) }}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <input class="btn btn-default" type="submit" value="Agregar" />
+          </td>
+      </tbody>
+    </table>
+    {{ form_end(form) }}
+
+    <ul>
+        <li>
+            <a class="btn btn-default" href="{{ path('panel_speciality_index') }}">Volver</a>
+        </li>
+    </ul>
+{% endblock %}

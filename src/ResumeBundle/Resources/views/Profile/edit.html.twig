@@ -1,0 +1,86 @@
+{% extends "ResumeBundle:Default:panel-layout.html.twig" %}
+
+{% block maincontent %}
+        {% if user.firstname is empty %}
+          <h1>Hola, {{user.username}}</h1>
+        {% else %}
+          <h1>Hola, {{user.firstname}}</h1>
+        {% endif %}
+        <hr>
+        {{ form_start(edit_form, { 'action': path('resume_profile_edit'), 'attr': { 'class': '' } }) }}
+        <table class="table table-bordered">
+          <tr>
+            <th colspan="2">Información Personal</th>
+          </tr>
+          <tr>
+            <th>Primer Nombre</th>
+            <td><p class="text-danger">{{ form_errors(edit_form.firstname) }}</p>
+            {{ form_widget(edit_form.firstname) }}</td>
+          </tr>
+          <tr>
+            <th>Segundo Nombre</th>
+            <td><p class="text-danger">{{ form_errors(edit_form.middlename) }}</p>
+            {{ form_widget(edit_form.middlename) }}</td>
+          </tr>
+          <tr>
+            <th>Apellido Paterno</th>
+            <td><p class="text-danger">{{ form_errors(edit_form.lastname) }}</p>
+            {{ form_widget(edit_form.lastname) }}</td>
+          </tr>
+          <tr>
+            <th>Apellido Materno</th>
+            <td><p class="text-danger">{{ form_errors(edit_form.momlastname) }}</p>
+            {{ form_widget(edit_form.momlastname) }}</td>
+          </tr>
+          <tr>
+            <th>{{ form_label(edit_form.gender) }}</th>
+            <td><p class="text-danger">{{ form_errors(edit_form.gender) }}</p>
+            {{ form_widget(edit_form.gender) }}</td>
+          </tr>
+          <tr>
+            <th>Fecha de nacimiento</th>
+            <td><p class="text-danger">{{ form_errors(edit_form.birthdate) }}</p>
+            {{ form_widget(edit_form.birthdate) }}</td>
+          </tr>
+          <tr>
+            <th colspan="2">Información de Contacto</th>
+          </tr>
+          <tr>
+            <th>Correo</th>
+            <td>{{user.email}}</td>
+          </tr>
+          <tr>
+            <th>Teléfono</th>
+            <td><p class="text-danger">{{ form_errors(edit_form.phone) }}</p>
+            {{ form_widget(edit_form.phone) }}</td>
+          </tr>
+          <tr>
+            <th>Celular</th>
+            <td><p class="text-danger">{{ form_errors(edit_form.celphone) }}</p>
+            {{ form_widget(edit_form.celphone) }}</td>
+          </tr>
+          <tr>
+            <th colspan="2">Localización</th>
+          </tr>
+          <tr>
+            <th>Dirección</th>
+            <td><p class="text-danger">{{ form_errors(edit_form.address) }}</p>
+            {{ form_widget(edit_form.address) }}</td>
+          </tr>
+          <tr>
+            <th>Ciudad</th>
+            <td><p class="text-danger">{{ form_errors(edit_form.city) }}</p>
+            {{ form_widget(edit_form.city) }}</td>
+          </tr>
+          <tr>
+            <th colspan="2">
+              <div class="btn-group button-in-table" role="group" aria-label="...">
+                <input class="btn btn-default" type="submit" value="Actualizar" />
+                <a class="btn btn-default" href="{{path('resume_profile_show')}}">Volver</a>
+              </div>
+            </th>
+          </tr>
+        </table>
+        {{ form_end(edit_form) }}
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{# extends 'base.html.twig' #}
+{% extends "ResumeBundle:Default:panel-layout.html.twig" %}
+
+{% block maincontent %}
+    <h1>Especialidad</h1>
+
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th>#</th>
+                <td>{{ speciality.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ speciality.name }}</td>
+            </tr>
+            <tr>
+              <td colspan="2">
+              <div class="btn-group button-in-table" role="group" aria-label="...">
+                  <a class="btn btn-default"  href="{{ path('panel_speciality_index') }}">Volver</a>
+                  <a class="btn btn-default" href="{{ path('panel_speciality_edit', { 'id': speciality.id }) }}">Editar</a>
+              </div>
+              </td>
+            </tr>
+        </tbody>
+    </table>
+    <hr>
+    {{ form_start(delete_form) }}
+    <input class="btn btn-danger" type="submit" value="Eliminar">
+    {{ form_end(delete_form) }}
+{% endblock %}

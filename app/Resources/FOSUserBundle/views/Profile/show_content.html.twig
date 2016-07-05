@@ -1,0 +1,37 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+<h1>Proceso de Actualización Completo</h1>
+<hr>
+<table class="table table-bordered table-hover">
+  <tr>
+    <th colspan="2"><p class="button-in-table">Información</p></th>
+  </tr>
+  <tr>
+    <td colspan="2">
+    {% if app.request.hasPreviousSession %}
+        {% for type, messages in app.session.flashbag.all() %}
+            {% for message in messages %}
+                <div class="text-in-table flash-{{ type }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+    </td>
+  <tr>
+  <tr>
+    <th>{{ 'profile.show.username'|trans }}</th>
+    <td>{{ user.username }}</td>
+  </tr>
+  <tr>
+    <th>{{ 'profile.show.email'|trans }}</th>
+    <td>{{ user.email }}</td>
+  </tr>
+  <tr>
+    <th colspan="2">
+      <div class="btn-group button-in-table" role="group" aria-label="...">
+        <a class="btn btn-default" href="{{path('resume_profile_show')}}">Volver</a>
+      </div>
+    </th>
+  </tr>
+</table>

@@ -1,0 +1,60 @@
+{# extends 'base.html.twig' #}
+{% extends "ResumeBundle:Default:panel-layout.html.twig" %}
+{% block maincontent %}
+    <h1>Trabajo</h1>
+    <hr>
+    {{ form_start(form) }}
+    <table class="table table-bordered table-hover">
+      <tbody>
+        <tr>
+          <th>Nombre</th>
+          <td><p class="text-danger">{{ form_errors(form.name) }}</p>
+	{{ form_widget(form.name) }}</td>
+        </tr>
+        <tr>
+          <th>Detalle/Descripción</th>
+          <td><p class="text-danger">{{ form_errors(form.detail) }}</p>
+	{{ form_widget(form.detail) }}</td>
+        </tr>
+        <tr>
+          <th>Fecha Inicio</th>
+          <td><p class="text-danger">{{ form_errors(form.startjob) }}</p>
+	{{ form_widget(form.startjob) }}</td>
+        </tr>
+        <tr>
+          <th>Fecha Termino</th>
+          <td><p class="text-danger">{{ form_errors(form.endjob) }}</p>
+	{{ form_widget(form.endjob) }}</td>
+        </tr>
+        <tr>
+          <th>Horas</th>
+          <td><p class="text-danger">{{ form_errors(form.hours) }}</p>
+	{{ form_widget(form.hours) }}</td>
+        </tr>
+        <tr>
+          <th>Especialidad</th>
+          <td><p class="text-danger">{{ form_errors(form.speciality) }}</p>
+	{{ form_widget(form.speciality) }}</td>
+        </tr>
+        <tr>
+          <th>Establecimiento</th>
+          <td><p class="text-danger">{{ form_errors(form.workplace) }}</p>
+	{{ form_widget(form.workplace) }}</td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <input class="btn btn-default" type="submit" value="Agregar" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="disabled">
+      {{form_widget(form.username)}}
+    </div>
+    {{ form_end(form) }}
+    <ul>
+        <li>
+            <a class="btn btn-default" href="{{ path('panel_job_index') }}">Volver</a>
+        </li>
+    </ul>
+{% endblock %}

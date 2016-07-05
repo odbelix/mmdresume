@@ -1,0 +1,79 @@
+
+
+<ul class="list-group">
+
+  {% if menu == "profile" %}
+  <li class="list-group-item active">
+  {% else %}
+  <li class="list-group-item">
+  {% endif %}
+  <a href="{{path('resume_profile_show')}}">Mi Perfil</a></li>
+
+  {# ROLE_TEACHER #}
+  {% if is_granted('ROLE_TEACHER') %}
+    {#RESUME#}
+    {% if menu == "resume" %}
+      <li class="list-group-item active">
+    {% else %}
+      <li class="list-group-item">
+    {% endif %}
+    <a href="{{path('resume_default_resume')}}">Mi Curriculum</a></li>
+
+    {#ASSIGNMENT#}
+    {% if menu == "assignment" %}
+      <li class="list-group-item active">
+    {% else %}
+      <li class="list-group-item">
+    {% endif %}
+    <a href="{{path('resume_default_assignments')}}">Mis Asignaciones</a></li>
+
+  {% endif%}
+
+
+  {% if is_granted('ROLE_MONITOR') %}
+    {#TEACHERS#}
+    {% if menu == "teachers" %}
+    <li class="list-group-item active">
+    {% else %}
+    <li class="list-group-item">
+    {% endif %}
+    <a href="">Docentes</a></li>
+    {#JOBS#}
+    {% if menu == "jobs" %}
+    <li class="list-group-item active">
+    {% else %}
+    <li class="list-group-item">
+    {% endif %}
+    <a href="{{path('panel_job_index')}}">Trabajos</a></li>
+  {% endif %}
+
+  {% if is_granted('ROLE_DIRECTOR') %}
+    {#ADMINS#}
+    {% if menu == "monitor" %}
+      <li class="list-group-item active">
+    {% else %}
+    <li class="list-group-item">
+    {% endif %}
+      <a href="{{path('resume_default_monitor')}}">Usuarios Admin</a></li>
+
+    {#LIST VALUES#}
+    <li class="list-group-item">
+    <h5>Lista de Valores</h5>
+    <ul>
+      {% if menu == "workplace" %}
+      <li class="list-group-item active">
+      {% else %}
+      <li class="list-group-item">
+      {% endif %}
+        <a href="{{path('panel_workplace_index')}}">Colegios</a></li>
+      {% if menu == "speciality" %}
+      <li class="list-group-item active">
+      {% else %}
+      <li class="list-group-item">
+      {% endif %}
+        <a href="{{path('panel_speciality_index')}}">Especialidades</a></li>
+    </ul>
+    </li>
+    {% endif %}
+
+</ul>
