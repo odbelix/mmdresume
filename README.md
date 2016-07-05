@@ -4,7 +4,7 @@ mmdresumen
 
 ###Features:
 
-* Seegure auth
+* Segure auth
 * Profile Management
 * User Management
 * Job Management
