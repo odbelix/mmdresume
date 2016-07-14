@@ -40,6 +40,16 @@ class Workplace
     */
     private $jobs;
 
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="responsable", type="string", length=300)
+     */
+    private $responsable;
+
+
     /**
      * Get id
      *
@@ -96,5 +106,49 @@ class Workplace
     public function getAddress()
     {
         return $this->address;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->jobs = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add job
+     *
+     * @param \ResumeBundle\Entity\Job $job
+     *
+     * @return Workplace
+     */
+    public function addJob(\ResumeBundle\Entity\Job $job)
+    {
+        $this->jobs[] = $job;
+
+        return $this;
+    }
+
+    /**
+     * Remove job
+     *
+     * @param \ResumeBundle\Entity\Job $job
+     */
+    public function removeJob(\ResumeBundle\Entity\Job $job)
+    {
+        $this->jobs->removeElement($job);
+    }
+
+    /**
+     * Get jobs
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getJobs()
+    {
+        return $this->jobs;
+    }
+    public function __toString() {
+        return $this->name;
     }
 }

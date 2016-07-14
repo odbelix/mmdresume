@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use ResumeBundle\Entity\Job;
 use ResumeBundle\Form\JobType;
+use ResumeBundle\Controller\InfotextController;
 
 /**
  * Job controller.
@@ -47,8 +48,21 @@ class JobController extends Controller
         $form = $this->createForm('ResumeBundle\Form\JobType', $job);
         $form->handleRequest($request);
 
+        /*Recovering the Infotext*/
+        $em = $this->getDoctrine()->getManager();
+        $infotext = $em->getRepository('ResumeBundle:Infotext')->findOneByShortname('infotext_job');
+
+
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+
+            //FOR THE CREATION
+            $job->setUsername($this->getUser());
+            $job->setLastusername($this->getUser());
+            $job->setCreated(new \DateTime('now'));
+            $job->setLastupdate(new \DateTime('now'));
+            $job->setVersion(1);
+
             $em->persist($job);
             $em->flush();
 
@@ -57,6 +71,7 @@ class JobController extends Controller
 
         return $this->render('job/new.html.twig', array(
             'job' => $job,
+            'infotext' => $infotext->getText(),
             'menu' => $this->getMyMenu(),
             'form' => $form->createView(),
         ));
@@ -71,9 +86,10 @@ class JobController extends Controller
     public function showAction(Job $job)
     {
         $deleteForm = $this->createDeleteForm($job);
-
+        $days = $job->getTotalDays();
         return $this->render('job/show.html.twig', array(
             'job' => $job,
+            'days' => $days,
             'menu' => $this->getMyMenu(),
             'delete_form' => $deleteForm->createView(),
         ));
@@ -93,10 +109,16 @@ class JobController extends Controller
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
+
+            $job->setLastusername($this->getUser());
+            $job->setLastupdate(new \DateTime('now'));
+            $job->setVersion($job->getVersion()+1);
+
             $em->persist($job);
             $em->flush();
 
-            return $this->redirectToRoute('panel_job_edit', array('id' => $job->getId()));
+            return $this->redirectToRoute('panel_job_show', array('id' => $job->getId()));
+            //return $this->redirectToRoute('panel_job_edit', array('id' => $job->getId()));
         }
 
         return $this->render('job/edit.html.twig', array(

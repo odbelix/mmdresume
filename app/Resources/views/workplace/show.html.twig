@@ -1,5 +1,5 @@
 {# extends 'base.html.twig' #}
-{% extends "ResumeBundle:Default:panel-layout.html.twig" %}
+{% extends "ResumeBundle:Default:panel-backend.html.twig" %}
 
 {% block maincontent %}
     <h1>Lugar de trabajo</h1>
@@ -13,6 +13,10 @@
             <tr>
                 <th>Dirección</th>
                 <td>{{ workplace.address }}</td>
+            </tr>
+            <tr>
+                <th>Director</th>
+                <td>{{ workplace.responsable }}</td>
             </tr>
             <tr>
               <td colspan="2">

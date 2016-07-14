@@ -40,6 +40,16 @@ class Workplace
     */
     private $jobs;
 
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="responsable", type="string", length=300)
+     */
+    private $responsable;
+
+
     /**
      * Get id
      *
@@ -140,5 +150,29 @@ class Workplace
     }
     public function __toString() {
         return $this->name;
+    }
+
+    /**
+     * Set responsable
+     *
+     * @param string $responsable
+     *
+     * @return Workplace
+     */
+    public function setResponsable($responsable)
+    {
+        $this->responsable = $responsable;
+
+        return $this;
+    }
+
+    /**
+     * Get responsable
+     *
+     * @return string
+     */
+    public function getResponsable()
+    {
+        return $this->responsable;
     }
 }

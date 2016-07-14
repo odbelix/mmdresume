@@ -1,0 +1,95 @@
+{% extends "ResumeBundle:Default:panel-backend.html.twig" %}
+{% block maincontent %}
+<div class="row">
+    <div class="col-lg-12">
+    <h1 class="page-header">Asistentes</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+  <div class="col-lg-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">Información del Asistente</div>
+        <div class="panel-body">
+        <div class="row">
+          <div class="col-lg-6">
+          <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+            <tr>
+              <th colspan="2">Información Personal</th>
+            </tr>
+            <tr>
+              <th>Primer Nombre</th>
+              <td>{{assistant.firstname}}</td>
+            </tr>
+            <tr>
+              <th>Segundo Nombre</th>
+              <td>{{assistant.middlename}}</td>
+            </tr>
+            <tr>
+              <th>Apellido Paterno</th>
+              <td>{{assistant.lastname}}</td>
+            </tr>
+            <tr>
+              <th>Apellido Materno</th>
+              <td>{{assistant.momlastname}}</td>
+            </tr>
+            <tr>
+              <th>Genero</th>
+              <td>{{assistant.gender}}</td>
+            </tr>
+            <tr>
+              <th>Fecha de nacimiento</th>
+              <td>{{assistant.birthdate|date("d-M-Y")}}</td>
+            </tr>
+            <tr>
+              <th colspan="2">Información de Contacto</th>
+            </tr>
+            <tr>
+              <th>Correo</th>
+              <td>{{assistant.email}}</td>
+            </tr>
+            <tr>
+              <th>Teléfono</th>
+              <td>{{assistant.phone}}</td>
+            </tr>
+            <tr>
+              <th>Celular</th>
+              <td>{{assistant.celphone}}</td>
+            </tr>
+            <tr>
+              <th colspan="2">Localización</th>
+            </tr>
+            <tr>
+              <th>Dirección</th>
+              <td>{{assistant.address}}</td>
+            </tr>
+            <tr>
+              <th>Ciudad</th>
+              <td>{{assistant.city}}</td>
+            </tr>
+            <tr>
+              <th colspan="2">
+                <div class="btn-group button-in-table" role="group" aria-label="...">
+                  <a class="btn btn-default" href="#">Dar de baja</a>
+                </div>
+              </th>
+            </tr>
+          </table>
+
+          </div>
+    <div class="col-lg-6">
+
+    </div>
+
+      </div>
+    </div>
+    <!-- /.panel panel-default
+
+    </div>
+    </div>
+    <!-- /.col-lg-12 /.row -->
+
+
+
+{% endblock %}

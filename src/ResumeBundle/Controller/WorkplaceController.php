@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use ResumeBundle\Entity\Workplace;
 use ResumeBundle\Form\WorkplaceType;
+use ResumeBundle\Controller\InfotextController;
 
 /**
  * Workplace controller.
@@ -47,6 +48,12 @@ class WorkplaceController extends Controller
         $form = $this->createForm('ResumeBundle\Form\WorkplaceType', $workplace);
         $form->handleRequest($request);
 
+        /*Recovering the Infotext*/
+        $em = $this->getDoctrine()->getManager();
+        $infotext = $em->getRepository('ResumeBundle:Infotext')->findOneByShortname('infotext_workplace');
+
+
+
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($workplace);
@@ -57,6 +64,7 @@ class WorkplaceController extends Controller
 
         return $this->render('workplace/new.html.twig', array(
             'workplace' => $workplace,
+            'infotext' => $infotext->getText(),
             'menu' => $this->getMyMenu(),
             'form' => $form->createView(),
         ));

@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use ResumeBundle\Entity\Speciality;
 use ResumeBundle\Form\SpecialityType;
+use ResumeBundle\Controller\InfotextController;
+
 
 /**
  * Speciality controller.
@@ -47,6 +49,11 @@ class SpecialityController extends Controller
         $form = $this->createForm('ResumeBundle\Form\SpecialityType', $speciality);
         $form->handleRequest($request);
 
+        /*Recovering the Infotext*/
+        $em = $this->getDoctrine()->getManager();
+        $infotext = $em->getRepository('ResumeBundle:Infotext')->findOneByShortname('infotext_speciality');
+
+
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($speciality);
@@ -57,6 +64,7 @@ class SpecialityController extends Controller
 
         return $this->render('speciality/new.html.twig', array(
             'speciality' => $speciality,
+            'infotext' => $infotext->getText(),
             'menu' => $this->getMyMenu(),
             'form' => $form->createView(),
         ));

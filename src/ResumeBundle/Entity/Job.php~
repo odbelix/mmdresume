@@ -3,7 +3,7 @@
 namespace ResumeBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints\DateTime;
 /**
  * Job
  *
@@ -52,9 +52,41 @@ class Job
     /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string")
+     * @ORM\Column(name="username", type="string",nullable=true)
      */
     private $username;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lastusername", type="string",nullable=true)
+     */
+    private $lastusername;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lastupdate", type="date",nullable=true)
+     */
+    private $lastupdate;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="created", type="date",nullable=true)
+     */
+    private $created;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="version", type="integer",nullable=true)
+     */
+    private $version;
+
+
 
 
     /**
@@ -256,5 +288,116 @@ class Job
     public function getWorkplace()
     {
         return $this->workplace;
+    }
+
+    /**
+     * Set hours
+     *
+     * @param integer $hours
+     *
+     * @return Job
+     */
+    public function setHours($hours)
+    {
+        $this->hours = $hours;
+
+        return $this;
+    }
+
+    /**
+     * Get hours
+     *
+     * @return integer
+     */
+    public function getHours()
+    {
+        return $this->hours;
+    }
+
+
+    /**
+     *  Get amount of day between dates
+     *
+     */
+    public function getTotalDays()
+    {
+      $total = date_diff($this->startjob, $this->endjob)->format('%a')+1;
+      return $total;
+    }
+
+
+
+
+
+    /**
+     * Set lastusername
+     *
+     * @param string $lastusername
+     *
+     * @return Job
+     */
+    public function setLastusername($lastusername)
+    {
+        $this->lastusername = $lastusername;
+
+        return $this;
+    }
+
+    /**
+     * Get lastusername
+     *
+     * @return string
+     */
+    public function getLastusername()
+    {
+        return $this->lastusername;
+    }
+
+    /**
+     * Set lastupdate
+     *
+     * @param \DateTime $lastupdate
+     *
+     * @return Job
+     */
+    public function setLastupdate($lastupdate)
+    {
+        $this->lastupdate = $lastupdate;
+
+        return $this;
+    }
+
+    /**
+     * Get lastupdate
+     *
+     * @return \DateTime
+     */
+    public function getLastupdate()
+    {
+        return $this->lastupdate;
+    }
+
+    /**
+     * Set created
+     *
+     * @param \DateTime $created
+     *
+     * @return Job
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * Get created
+     *
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
     }
 }

@@ -1,41 +1,61 @@
 {# extends 'base.html.twig' #}
-{% extends "ResumeBundle:Default:panel-layout.html.twig" %}
+{% extends "ResumeBundle:Default:panel-backend.html.twig" %}
 {% block maincontent %}
-    <h1>Trabajos</h1>
-    <hr>
-    <table class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Nombre</th>
-                <th>Inicio</th>
-                <th>Termino</th>
-                <th>Establecimiento</th>
-                <th>Opciones</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for job in jobs %}
-            <tr>
-                <td><a href="{{ path('panel_job_show', { 'id': job.id }) }}">{{ job.id }}</a></td>
-                <td>{{ job.name }}</td>
-                <td>{% if job.startjob %}{{ job.startjob|date('Y-m-d') }}{% endif %}</td>
-                <td>{% if job.endjob %}{{ job.endjob|date('Y-m-d') }}{% endif %}</td>
-                <td>{{ job.workplace }}</td>
-                <td class="btn-group-wrap">
-                  <div class="btn-group button-in-table" role="group" aria-label="...">
-                    <a class="btn btn-default" href="{{ path('panel_job_show', { 'id': job.id }) }}">Ver</a>
-                    <a class="btn btn-default" href="{{ path('panel_job_edit', { 'id': job.id }) }}">Editar</a>
-                  </div>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 
-    <ul>
-        <li>
-            <a class="btn btn-default" href="{{ path('panel_job_new') }}">Nuevo</a>
-        </li>
-    </ul>
+<div class="row">
+    <div class="col-lg-12">
+    <h1 class="page-header">Trabajos</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+  <div class="col-lg-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">Lista de <b>Trabajos</b> creados en la Plataforma
+        <a class="btn btn-default" href="{{ path('panel_job_new') }}">Nuevo</a>
+        </div>
+        <div class="panel-body">
+            {% include "ResumeBundle:Utils:search-table-searchbar.html.twig" %}
+            <table class="table table-bordered table-hover results">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Inicio</th>
+                        <th>Termino</th>
+                        <th>Establecimiento</th>
+                        <th>Opciones</th>
+                    </tr>
+                    {% set columns = 6 %}
+                    {% include "ResumeBundle:Utils:search-table-trresult.html.twig" %}
+                </thead>
+                <tbody>
+                {% set count = 1 %}
+                {% for job in jobs %}
+                    <tr>
+                        <td><a href="{{ path('panel_job_show', { 'id': job.id }) }}">{{ count }}</a></td>
+                        <td>{{ job.name }}</td>
+                        <td>{% if job.startjob %}{{ job.startjob|date('Y-m-d') }}{% endif %}</td>
+                        <td>{% if job.endjob %}{{ job.endjob|date('Y-m-d') }}{% endif %}</td>
+                        <td>{{ job.workplace }}</td>
+                        <td class="btn-group-wrap">
+                          <div class="btn-group button-in-table" role="group" aria-label="...">
+                            <a class="btn btn-default" href="{{ path('panel_job_show', { 'id': job.id }) }}">Ver</a>
+                            <a class="btn btn-default" href="{{ path('panel_job_edit', { 'id': job.id }) }}">Editar</a>
+                          </div>
+                        </td>
+                    </tr>
+                    {% set count = count + 1 %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+      </div>
+   </div>
+</div>
+{% endblock %}
+
+{% block scriptpage %}
+<script src="{{asset('js/search-bar-tables.js')}}"></script>
 {% endblock %}

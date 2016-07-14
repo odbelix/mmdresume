@@ -17,9 +17,10 @@ class WorkplaceType extends AbstractType
         $builder
             ->add('name')
             ->add('address')
+            ->add('responsable')
         ;
     }
-    
+
     /**
      * @param OptionsResolver $resolver
      */

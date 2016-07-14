@@ -25,7 +25,7 @@ class DefaultController extends Controller
       if (!is_object($user)) {
           return $this->render('ResumeBundle:Default:index.html.twig');
       }
-        return $this->render('ResumeBundle:Default:panel-layout.html.twig');
+        return $this->render('ResumeBundle:Default:panel-backend.html.twig');
     }
 
 
@@ -71,10 +71,10 @@ class DefaultController extends Controller
       if (!is_object($user)) {
           return $this->render('ResumeBundle:Default:index.html.twig');
       }
-        return $this->render('ResumeBundle:Resume:resume.html.twig', array(
-              'user' => $user,
-              'menu' => 'resume'
-            ));
+      return $this->render('ResumeBundle:Resume:resume.html.twig', array(
+            'user' => $user,
+            'menu' => 'resume'
+      ));
     }
 
 
@@ -90,7 +90,7 @@ class DefaultController extends Controller
       if (!is_object($user)) {
           return $this->render('ResumeBundle:Default:index.html.twig');
       }
-        return $this->render('ResumeBundle:Default:panel-layout.html.twig');
+        return $this->render('ResumeBundle:Default:panel-backend.html.twig');
     }
 
 

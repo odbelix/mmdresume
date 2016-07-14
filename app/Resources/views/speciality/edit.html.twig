@@ -1,28 +1,41 @@
 {# extends 'base.html.twig' #}
-{% extends "ResumeBundle:Default:panel-layout.html.twig" %}
+{% extends "ResumeBundle:Default:panel-backend.html.twig" %}
 {% block maincontent %}
-    <h1>Editando Especialidad</h1>
-    <hr>
-    {{ form_start(edit_form) }}
-    <table class="table table-bordered">
-      <tbody>
-      <tr>
-        <th>{{ form_label(edit_form.name) }}</th>
-        <td>{{ form_errors(edit_form.name) }}
-        {{ form_widget(edit_form.name, { 'attr': {'class': 'form-control'} }) }}</td>
-      </tr>
-      <tr>
-        <td colspan="2">
+<div class="row">
+    <div class="col-lg-12">
+    <h1 class="page-header">Especialidades</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+              <div class="panel-heading">
+                  Editanto Especialidad
+              </div>
+              <div class="panel-body">
+
+    {{ form_start(edit_form,{'attr': { 'role': 'form' } }) }}
+      <div class="form-group">
+        <label>Nombre</label>
+        <p class="text-danger">{{ form_errors(edit_form.name) }}</p>
+        {{ form_widget(edit_form.name, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+      <div class="form-group">
           <input class="btn btn-default" type="submit" value="Editar" />
           <a class="btn btn-default" href="{{ path('panel_speciality_index') }}">Volver</a>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+      </div>
     {{ form_end(edit_form) }}
+        </div>
+        <div class="panel-footer">
+        {{ form_start(delete_form) }}
+          <input class="btn btn-danger" type="submit" value="Eliminar">
+        {{ form_end(delete_form) }}
+        </div>
 
-    <hr>
-    {{ form_start(delete_form) }}
-      <input class="btn btn-danger" type="submit" value="Eliminar">
-    {{ form_end(delete_form) }}
+    </div>
+    <div class="col-lg-6">
+    </div>
+</div>
+
 {% endblock %}

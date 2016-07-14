@@ -20,13 +20,29 @@ class JobType extends AbstractType
             ->add('name')
             ->add('detail',TextareaType::class, array(
               'attr' => array('class' => 'tinymce','class' => 'textbox')))
-            ->add('startjob', DateType::class)
-            ->add('endjob', DateType::class)
+            ->add('startjob', DateType::class, array(
+                'widget' => 'single_text',
+                'format' => 'dd-MM-yyyy',
+                'attr' => array(
+                'class' => 'form-control input-inline datepicker',
+                'data-provide' => 'datepicker',
+                'data-date-format' => 'dd-mm-yyyy'
+                )
+            ))
+            ->add('endjob', DateType::class, array(
+                'widget' => 'single_text',
+                'format' => 'dd-MM-yyyy',
+                'attr' => array(
+                'class' => 'form-control input-inline datepicker',
+                'data-provide' => 'datepicker',
+                'data-date-format' => 'dd-mm-yyyy',
+                'language' => 'es'
+                )
+            ))
             ->add('hours')
-            ->add('username')
+            //->add('username')
             ->add('speciality')
-            ->add('workplace')
-        ;
+            ->add('workplace');
     }
 
     /**

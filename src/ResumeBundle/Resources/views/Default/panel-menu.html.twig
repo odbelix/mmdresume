@@ -37,14 +37,14 @@
     {% else %}
     <li class="list-group-item">
     {% endif %}
-    <a href="">Docentes</a></li>
+    <a href="">Candidatos</a></li>
     {#JOBS#}
     {% if menu == "jobs" %}
     <li class="list-group-item active">
     {% else %}
     <li class="list-group-item">
     {% endif %}
-    <a href="{{path('panel_job_index')}}">Trabajos</a></li>
+    <a href="{{path('panel_job_index')}}">Plazas de Trabajo</a></li>
   {% endif %}
 
   {% if is_granted('ROLE_DIRECTOR') %}
