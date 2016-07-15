@@ -1,0 +1,52 @@
+{% extends "ResumeBundle:Default:panel-backend.html.twig" %}
+
+{% block maincontent %}
+<div class="row">
+    <div class="col-lg-12">
+    <h1 class="page-header">Título Técnico Nivel Medio</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<div class="row">
+  <div class="col-lg-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">Lista de <b>Títulos Técnicos Nivel Medio</b> creadas en la Plataforma para los Asistentes de Educación
+        <a class="btn btn-default" href="{{ path('panel_technicianmid_new') }}">Nuevo</a>
+        </div>
+        <div class="panel-body">
+        {% include "ResumeBundle:Utils:search-table-searchbar.html.twig" %}
+            <table class="table table-bordered results">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Opciones</th>
+                </tr>
+                {% set columns = 3 %}
+                {% include "ResumeBundle:Utils:search-table-trresult.html.twig" %}
+            </thead>
+            <tbody>
+            {% set count = 1 %}
+            {% for technician in technicianMids %}
+            <tr>
+                <td><a href="{{ path('panel_technicianmid_show', { 'id': technician.id }) }}">{{ count }}</a></td>
+                <td>{{ technician.name }}</td>
+                <td>
+                  <a class="btn btn-default" href="{{ path('panel_technicianmid_edit', { 'id': technician.id }) }}">Editar</a>
+                </td>
+             </tr>
+             {% set count = count + 1 %}
+             {% endfor %}
+          </tbody>
+          </table>
+          </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block scriptpage %}
+      <script src="{{asset('js/search-bar-tables.js')}}"></script>
+{% endblock %}

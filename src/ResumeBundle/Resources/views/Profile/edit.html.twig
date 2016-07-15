@@ -19,6 +19,14 @@
       {{ form_start(edit_form, { 'action': path('resume_profile_edit'), 'attr': { 'role': 'form' } }) }}
           <h2>Información Personal</h2>
           <hr>
+            {% if is_granted('ROLE_TEACHER') %}
+            <div class="form-group">
+              <label>Rut</label>
+              <p class="text-danger">{{ form_errors(edit_form.rut) }}</p>
+              {{ form_widget(edit_form.rut,{ 'attr': {'class': 'form-control'}}) }}
+            </div>
+            {% endif %}
+
             <div class="form-group">
               <label>Primer Nombre</label>
               <p class="text-danger">{{ form_errors(edit_form.firstname) }}</p>
@@ -75,7 +83,7 @@
             <div class="form-group">
               <label>Ciudad</label>
               <p class="text-danger">{{ form_errors(edit_form.city) }}</p>
-              {{ form_widget(edit_form.city) }}
+              {{ form_widget(edit_form.city,{ 'attr': {'class': 'form-control'} }) }}
             </div>
             <div class="btn-group button-in-table" role="group" aria-label="...">
               <input class="btn btn-default" type="submit" value="Actualizar" />

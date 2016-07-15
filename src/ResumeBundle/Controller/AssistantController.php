@@ -8,7 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use ResumeBundle\Entity\Infotext;
-//use ResumeBundle\Entity\User;
+use ResumeBundle\Entity\User;
 
 /**
  * Assistant controller.
@@ -63,6 +63,8 @@ class AssistantController extends Controller
          $userManipulator->addRole($username,"ROLE_MONITOR");
 
          //SEND email
+         $this->sendMonitorFirstEmail($username,$email,$password);
+
          $success = "El usuario fue creado con Exito. Un correo fue enviado con la información de Acceso";
       }
 
@@ -152,6 +154,35 @@ class AssistantController extends Controller
           $message["username"] = "El nombre de usuario ya esta siendo utilizado";
       }
       return $message;
+  }
+
+  private function sendMonitorFirstEmail($username,$email,$password)
+  {
+      $message = \Swift_Message::newInstance()
+        ->setSubject('Registro DAEM-TALCA-CV')
+        ->setFrom('send@example.com')
+        ->setTo($email)
+        ->setBody(
+            $this->renderView(
+                // app/Resources/views/Emails/registration.html.twig
+                'assistant/registration.html.twig',
+                array('username' => $username,'password' => $password)
+            ),
+            'text/html'
+        )
+        /*
+         * If you also want to include a plaintext version of the message
+        ->addPart(
+            $this->renderView(
+                'Emails/registration.txt.twig',
+                array('name' => $name)
+            ),
+            'text/plain'
+        )
+        */
+    ;
+    $this->get('mailer')->send($message);
+
   }
 
 

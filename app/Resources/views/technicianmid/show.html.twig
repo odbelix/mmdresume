@@ -1,0 +1,47 @@
+{% extends "ResumeBundle:Default:panel-backend.html.twig" %}
+
+{% block maincontent %}
+<div class="row">
+    <div class="col-lg-12">
+    <h1 class="page-header">Título Técnico Nivel Medio</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<div class="row">
+    <div class="col-lg-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Título Técnico Nivel Superior # {{ technicianmid.id }}
+        </div>
+        <div class="panel-body">
+          <table class="table table-bordered">
+          <tbody>
+            <tr>
+                <th>#</th>
+                <td>{{ technicianmid.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ technicianmid.name }}</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                <a class="btn btn-default" href="{{ path('panel_technicianmid_index') }}">Volver</a>
+                <a class="btn btn-default" href="{{ path('panel_technicianmid_edit', { 'id': technicianmid.id }) }}">Editar</a>
+
+
+                </td>
+            </tr>
+          </tbody>
+          </table>
+        </div>
+        <div class="panel-footer">
+        {{ form_start(delete_form) }}
+            <input class="btn btn-danger" type="submit" value="Eliminar">
+        {{ form_end(delete_form) }}
+        </div>
+    </div>
+    <div class="col-lg-6">
+    </div>
+</div>
+{% endblock %}

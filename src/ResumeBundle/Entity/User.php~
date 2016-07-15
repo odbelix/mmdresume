@@ -75,6 +75,13 @@ class User extends BaseUser
      */
     protected $gender;
 
+
+    /**
+     * @ORM\Column(type="string",length=50,nullable=true)
+     */
+    protected $rut;
+
+
     /**
      * Set firstname
      *

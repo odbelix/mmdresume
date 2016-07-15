@@ -3,7 +3,7 @@
 {% block maincontent %}
 <div class="row">
     <div class="col-lg-12">
-    <h1 class="page-header">Título Docente Educación Media</h1>
+    <h1 class="page-header">Título Docente Educación Básica</h1>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -11,24 +11,24 @@
     <div class="col-lg-6">
       <div class="panel panel-default">
         <div class="panel-heading">
-          Título Docente Educación Media # {{ speciality.id }}
+          Título Docente Educación Básica # {{ basic.id }}
         </div>
         <div class="panel-body">
             <table class="table table-bordered">
                 <tbody>
                     <tr>
                         <th>#</th>
-                        <td>{{ speciality.id }}</td>
+                        <td>{{ basic.id }}</td>
                     </tr>
                     <tr>
                         <th>Nombre</th>
-                        <td>{{ speciality.name }}</td>
+                        <td>{{ basic.name }}</td>
                     </tr>
                     <tr>
                       <td colspan="2">
                       <div class="btn-group button-in-table" role="group" aria-label="...">
-                          <a class="btn btn-default"  href="{{ path('panel_speciality_index') }}">Volver</a>
-                          <a class="btn btn-default" href="{{ path('panel_speciality_edit', { 'id': speciality.id }) }}">Editar</a>
+                          <a class="btn btn-default"  href="{{ path('panel_basic_index') }}">Volver</a>
+                          <a class="btn btn-default" href="{{ path('panel_basic_edit', { 'id': basic.id }) }}">Editar</a>
                       </div>
                       </td>
                     </tr>

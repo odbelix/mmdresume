@@ -80,9 +80,14 @@
                     <a href="#"><i class="fa fa-bookmark fa-fw"></i>Docentes</a>
                 </li>
                 <li>
+                    <a href="#"><i class="fa fa-briefcase fa-fw"></i>Asistentes de Educación</a>
+                </li>
+                <li>
                     <a href="{{path('panel_job_index')}}"><i class="fa glyphicon fa-tags fa-fw"></i>Trabajos</a>
                 </li>
-
+                <li>
+                    <a href="{{path('resume_default_assignments')}}"><i class="fa fa-check-square fa-fw"></i>Asignaciones</a>
+                </li>
                 <li>
                     <a href="#"><i class="fa fa-cog fa-fw"></i>Administración<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
@@ -93,11 +98,46 @@
                             <a href="{{path('panel_workplace_index')}}">Establecimientos</a>
                         </li>
                         <li>
-                            <a href="{{path('panel_speciality_index')}}">Especialidad Docentes</a>
+                            <a href="{{path('panel_basic_index')}}">Educación Básica</a>
                         </li>
+                        <li>
+                            <a href="{{path('panel_speciality_index')}}">Educación Media</a>
+                        </li>
+                        <li>
+                            <a href="{{path('panel_profession_index')}}">Profesional</a>
+                        </li>
+                        <li>
+                            <a href="{{path('panel_techniciantop_index')}}">Técnico Nivel Superior</a>
+                        </li>
+                        <li>
+                            <a href="{{path('panel_technicianmid_index')}}">Técnico Nivel Medio</a>
+                        </li>
+
+                      <!--
+                        <li class="">
+                                 <a href="#">Títulos/Profesiones<span class="fa arrow"></span></a>
+                                 <ul class="nav nav-third-level collapse" aria-expanded="false" style="height: 0px;">
+                                        <li>
+                                            <a href="{{path('panel_basic_index')}}">Educación Básica</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{path('panel_speciality_index')}}">Educación Media</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{path('panel_profession_index')}}">Profesional</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{path('panel_technicianmid_index')}}">Tecnico Nivel Medio</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{path('panel_techniciantop_index')}}">Tecnico Nivel Superior</a>
+                                        </li>
+                                    </ul>
+                        </li>
+                      -->
                     </ul>
-                    <!-- /.nav-second-level -->
-                </li>
+                    </li>
+
                 {# ROLE_DEVELOPER #}
                 {% if is_granted('ROLE_DEVELOPER') %}
                 <li><a href="#"><i class="fa fa-file-code-o fa-fw"></i>Developer<span class="fa arrow"></span></a>
@@ -105,8 +145,12 @@
                     <li>
                         <a href="{{path('panel_infotext_index')}}">Texto de Ayuda</a>
                     </li>
+                    <li>
+                        <a href="{{path('panel_type_index')}}">Tipos de Postulantes</a>
+                    </li>
                 </ul>
                 </li>
+                <hr>
                 {% endif %}
 
             </ul>

@@ -1,0 +1,45 @@
+{% extends "ResumeBundle:Default:panel-backend.html.twig" %}
+
+{% block maincontent %}
+<div class="row">
+    <div class="col-lg-12">
+    <h1 class="page-header">Tipo de Postulantes</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<div class="row">
+    <div class="col-lg-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Nuevo Tipo de Postulantes
+        </div>
+        <div class="panel-body">
+        {{ form_start(edit_form) }}
+        <div class="form-group">
+          <label>Nombre</label>
+            <p class="text-danger">{{ form_errors(edit_form.name) }}</p>
+              {{ form_widget(edit_form.name,{ 'attr': {'class': 'form-control'} }) }}
+            <p class="help-block">Ejemplo: Psicologo</p>
+        </div>
+        <div class="form-group">
+            <input class="btn btn-default" type="submit" value="Actualizar" />
+        </div>
+        {{ form_end(edit_form) }}
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+                <div class="panel panel-info">
+                <div class="panel-heading">
+                    Información
+                </div>
+                <div class="panel-body">
+                    <p>{{infotext}}</p>
+                </div>
+                <div class="panel-footer">
+                    <a class="btn btn-default" href="{{ path('panel_type_index') }}">Volver</a>
+                </div>
+                </div>
+    </div>
+
+{% endblock %}

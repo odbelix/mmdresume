@@ -75,6 +75,13 @@ class User extends BaseUser
      */
     protected $gender;
 
+
+    /**
+     * @ORM\Column(type="string",length=50,nullable=true)
+     */
+    protected $rut;
+
+
     /**
      * Set firstname
      *
@@ -313,5 +320,29 @@ class User extends BaseUser
     public function getGender()
     {
         return $this->gender;
+    }
+
+    /**
+     * Set rut
+     *
+     * @param string $rut
+     *
+     * @return User
+     */
+    public function setRut($rut)
+    {
+        $this->rut = $rut;
+
+        return $this;
+    }
+
+    /**
+     * Get rut
+     *
+     * @return string
+     */
+    public function getRut()
+    {
+        return $this->rut;
     }
 }

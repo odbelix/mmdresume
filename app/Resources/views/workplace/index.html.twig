@@ -28,15 +28,17 @@
                   {% include "ResumeBundle:Utils:search-table-trresult.html.twig" %}
               </thead>
               <tbody>
+              {% set count = 1 %}
               {% for workplace in workplaces %}
                   <tr>
-                      <td><a href="{{ path('panel_workplace_show', { 'id': workplace.id }) }}">{{ workplace.id }}</a></td>
+                      <td><a href="{{ path('panel_workplace_show', { 'id': workplace.id }) }}">{{ count }}</a></td>
                       <td>{{ workplace.name }}</td>
                       <td>{{ workplace.address }}</td>
                       <td>
                         <a class="btn btn-default" href="{{ path('panel_workplace_edit', { 'id': workplace.id }) }}">Editar</a>
                       </td>
                   </tr>
+                   {% set count = count + 1 %}  
               {% endfor %}
               <tr>
                 <td colspan="4"><a class="btn btn-default" href="{{ path('panel_workplace_new') }}">Agregar nuevo Lugar</a></td>

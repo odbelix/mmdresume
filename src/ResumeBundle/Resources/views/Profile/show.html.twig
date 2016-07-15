@@ -26,6 +26,12 @@
           <tr>
             <th colspan="2">Información Personal</th>
           </tr>
+          {% if is_granted('ROLE_TEACHER') %}
+          <tr>
+            <th>Rut</th>
+            <td>{{user.rut}}</td>
+          </tr>
+          {% endif %}
           <tr>
             <th>Primer Nombre</th>
             <td>{{user.firstname}}</td>
@@ -65,6 +71,7 @@
             <th>Celular</th>
             <td>{{user.celphone}}</td>
           </tr>
+          {% if is_granted('ROLE_TEACHER') %}
           <tr>
             <th colspan="2">Localización</th>
           </tr>
@@ -76,6 +83,7 @@
             <th>Ciudad</th>
             <td>{{user.city}}</td>
           </tr>
+          {% endif %}
           <tr>
             <th colspan="2">
               <div class="btn-group button-in-table" role="group" aria-label="...">
