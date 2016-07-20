@@ -1,4 +1,9 @@
-{% extends "ResumeBundle:Default:panel-backend.html.twig" %}
+{% if is_granted('ROLE_TEACHER') %}
+  {% set THEME = "ResumeBundle:Default:panel-postulant.html.twig" %}
+{% else %}
+  {% set THEME = "ResumeBundle:Default:panel-backendt.html.twig" %}
+{% endif %}
+{% extends THEME %}
 
 {% block maincontent %}
           {% if user.firstname is empty %}

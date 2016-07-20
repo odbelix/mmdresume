@@ -5,11 +5,13 @@ security:
         FOS\UserBundle\Model\UserInterface: bcrypt
 
     role_hierarchy:
-        ROLE_USER:       [ROLE_USER]
+        #ROLE_USER:       [ROLE_USER]
         ROLE_TEACHER:    [ROLE_TEACHER]
+        ROLE_ASSISTANT:  [ROLE_ASSISTANT]
         ROLE_MONITOR:    [ROLE_MONITOR]
-        ROLE_DIRECTOR:   [ROLE_MONITOR]
-        ROLE_DEVELOPER:  [ROLE_DIRECTOR,ROLE_TEACHER]
+        ROLE_MANAGER:    [ROLE_MANAGER]
+        ROLE_DIRECTOR:   [ROLE_MONITOR,ROLE_MANAGER]
+        ROLE_DEVELOPER:  [ROLE_DIRECTOR,ROLE_TEACHER,ROLE_ASSISTANT]
 
     providers:
         fos_userbundle:

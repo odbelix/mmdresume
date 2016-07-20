@@ -81,6 +81,21 @@ class User extends BaseUser
      */
     protected $rut;
 
+    /**
+     * @ORM\Column(type="string",length=100,nullable=true)
+     */
+    protected $title;
+
+    /**
+     * @ORM\Column(type="string",length=100,nullable=true)
+     */
+    protected $usertype;
+
+    /**
+     * @ORM\Column(type="integer",length=100,nullable=true)
+     */
+    protected $usertypeid;
+
 
     /**
      * Set firstname
@@ -344,5 +359,77 @@ class User extends BaseUser
     public function getRut()
     {
         return $this->rut;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     *
+     * @return User
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set usertype
+     *
+     * @param string $usertype
+     *
+     * @return User
+     */
+    public function setUsertype($usertype)
+    {
+        $this->usertype = $usertype;
+
+        return $this;
+    }
+
+    /**
+     * Get usertype
+     *
+     * @return string
+     */
+    public function getUsertype()
+    {
+        return $this->usertype;
+    }
+
+    /**
+     * Set usertypeid
+     *
+     * @param integer $usertypeid
+     *
+     * @return User
+     */
+    public function setUsertypeid($usertypeid)
+    {
+        $this->usertypeid = $usertypeid;
+
+        return $this;
+    }
+
+    /**
+     * Get usertypeid
+     *
+     * @return integer
+     */
+    public function getUsertypeid()
+    {
+        return $this->usertypeid;
     }
 }

@@ -1,0 +1,111 @@
+{# extends 'base.html.twig' #}
+{% extends "ResumeBundle:Default:panel-backend.html.twig" %}
+{% block maincontent %}
+
+<div class="row">
+    <div class="col-lg-12">
+    <h1 class="page-header">Asistentes</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+  <div class="col-lg-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">Lista de <b>Postulantes</b> registrados en la Plataforma.
+        </div>
+        <div class="panel-body">
+        {% if success is defined and success is not empty %}
+        <div class="row">
+            <div class="col-lg-12">
+                  <div class="alert alert-success alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        {{success}}.
+                  </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if message is not empty%}
+        {% if message.username is defined or message.useremail is defined %}
+        <div class="row">
+            <div class="col-lg-12">
+              <div class="alert alert-danger alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                Se presentaron los siguientes problemas durante la creación del Asistente
+                <ul>
+                {% if message.username is defined %}<li>{{message.username}}</li>{% endif %}
+                {% if message.useremail is defined %}<li>{{message.useremail}}</li>{% endif %}
+                </ul>
+              </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endif %}
+        <div class="row">
+        <div class="col-lg-4">
+            <div class="panel panel-default">
+             <div class="panel-heading">
+                 <h4 class="panel-title">
+                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" class="">Nuevo Asistente</a>
+                 </h4>
+             </div>
+             <div id="collapseOne" class="panel-collapse collapse" aria-expanded="false">
+                 <div class="panel-body">
+                 </div>
+             </div>
+         </div>
+        </div>
+        <div class="col-lg-4">
+        </div>
+        </div>
+
+        <!-- FORM  NEW assistant -->
+
+        <!-- /FORM -->
+            {% include "ResumeBundle:Utils:search-table-searchbar.html.twig" %}
+            <table class="table table-bordered table-hover results">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Título</th>
+                        <th>Ultimo acceso</th>
+                        <th>Opciones</th>
+                    </tr>
+                    {% set columns = 6 %}
+                    {% include "ResumeBundle:Utils:search-table-trresult.html.twig" %}
+                </thead>
+                <tbody>
+                {% set count = 1 %}
+                {% for teacher in assistants %}
+                    <tr>
+                        <td><a href="{{ path('panel_assistant_show', { 'id': assistant.id }) }}">{{ count }}</a></td>
+                        {%if assistant.firstname is empty %}
+                          <td><span class="label label-danger">El Asistente aun no Completa su perfil</span></td>
+                        {% else %}
+                          <td>{{ assistant.firstname}} {{ assistant.middlename}} {{ assistant.lastname}} {{ assistant.momlastname}} </td>
+                        {% endif %}
+
+                        <td>{{ assistant.email }}</td>
+                        <td>{{ assistant.lastlogin|date('Y-m-d H:i:s')}}</td>
+                        <td class="btn-group-wrap">
+                          <div class="btn-group button-in-table" role="group" aria-label="...">
+                            <a class="btn btn-default" href="{{ path('panel_assistant_show', { 'id': assistant.id }) }}">Ver</a>
+                          </div>
+                        </td>
+                    </tr>
+                    {% set count = count + 1 %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+      </div>
+   </div>
+</div>
+{% endblock %}
+
+{% block scriptpage %}
+<script src="{{asset('js/search-bar-tables.js')}}"></script>
+{% endblock %}
