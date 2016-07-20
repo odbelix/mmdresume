@@ -11,7 +11,7 @@
     </div>
 </div>
 
-{% if message is defined %}
+{% if message is defined and message is not empty %}
 <div class="row">
     <div class="col-lg-12">
       <div class="alert alert-danger alert-dismissable">
@@ -21,7 +21,7 @@
     </div>
 </div>
 {% endif %}
-{% if success is defined %}
+{% if success is defined and message is not empty %}
 <div class="row">
     <div class="col-lg-12">
       <div class="alert alert-success alert-dismissable">
@@ -36,6 +36,7 @@
     <div class="col-lg-12">
       <h3 class="page-header">Información Personal</h3>
       <div class="text-right">
+        <a href="{{path('resume_resume_exportpdf')}}" class="btn btn-success"><span class="fa fa-file-pdf-o"></span> Exportar</a>
         <a href="{{path('resume_profile_show')}}" class="btn btn-info">Ver perfil</a>
       </div>
       <div class="caption-full">
@@ -144,7 +145,7 @@
             <td>{{title.obtaining}}</td>
             <td>
               <div class="text-right">
-                <a class="btn btn-default btn-sm" href=""><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> Eliminar</a>
+                <a class="btn btn-default btn-sm confirmation"  href="{{ path('resume_resume_deteletitle', { 'id': title.id ,'iduser':title.userid})}}"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> Eliminar</a>
               </div>
             </td>
           </tr>
@@ -243,7 +244,7 @@
             <td>{{exp.detail}}</td>
             <td>
             <div class="text-right">
-              <a class="btn btn-default btn-sm" href=""><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> Eliminar</a>
+              <a class="btn btn-default btn-sm confirmation" href="{{path('resume_resume_deteleexperience', { 'id': exp.id ,'iduser':exp.userid})}}"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> Eliminar</a>
             </div>
             </td>
           </tr>
@@ -270,7 +271,11 @@ $(function () {
     viewMode: "years",
     minViewMode: "years"
   });
-
 });
+</script>
+<script type="text/javascript">
+    $('.confirmation').on('click', function () {
+        return confirm('¿Esta seguro que desea eliminar?');
+    });
 </script>
 {% endblock%}

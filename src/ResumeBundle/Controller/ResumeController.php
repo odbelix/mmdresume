@@ -51,12 +51,21 @@ class ResumeController extends Controller
         $experiences = $em->getRepository('ResumeBundle:History')->findBy(
         array('userid' => $user->getId()), array('startdate' => 'DESC'));
 
-
+        //
+        $message = null;
+        $success = null;
+        if ($request->isMethod('POST')) {
+            $message = $request->request->get('message');
+            $success = $request->request->get('success');
+        }
+        //
         $formprof = $this->createFormProfForAssistantType($user->getUsertypeid());
         $formexp = $this->createFormExpForAssistantType($user->getUsertypeid(),$titles,$workplaces);
 
         return $this->render('resume/myresume.html.twig', array(
             'user' => $user,
+            'message' => $message,
+            'success' => $success,
             'titles' => $titles,
             'exps' => $experiences,
             'new_form_prof' => $formprof->createView(),
@@ -65,6 +74,74 @@ class ResumeController extends Controller
           ));
 
     }
+
+    /**
+     * @Route("/export/pdf")
+     * @Method({"GET","POST"})
+     */
+    public function exportPDFAction(Request $request){
+        $user = $this->getUser();
+        $this->validationAccessForUser($user);
+
+        $em = $this->getDoctrine()->getManager();
+
+        $titles = $em->getRepository('ResumeBundle:Title')->findBy(
+        array('userid' => $user->getId()), array('obtaining' => 'DESC'));
+
+        $experiences = $em->getRepository('ResumeBundle:History')->findBy(
+        array('userid' => $user->getId()), array('startdate' => 'DESC'));
+
+
+        $html = $this->render('resume/myresume_pdf.html.twig', array(
+            'user' => $user,
+            'titles' => $titles,
+            'exps' => $experiences,
+        ));
+        $this->returnPDFResponseFromHTML($html,$user);
+        //return $html;
+    }
+
+
+
+    /**
+     * @Route("/title/delete/{id}/{iduser}")
+     * @Method({"GET"})
+     */
+    public function deteleTitleAction($id,$iduser){
+        $user = $this->getUser();
+        $this->validationAccessForUser($user);
+
+        if ( $user->getId() == $iduser ){
+            $em = $this->getDoctrine()->getManager();
+            $title = $em->getRepository('ResumeBundle:Title')->findOneBy(
+            array('userid' => $user->getId(),'id' => $id));
+
+            $em->remove($title);
+            $em->flush();
+        }
+        return $this->redirectToRoute('resume_resume_index');
+    }
+
+        /**
+         * @Route("/experience/delete/{id}/{iduser}")
+         * @Method({"GET"})
+         */
+        public function deteleExperienceAction($id,$iduser){
+            $user = $this->getUser();
+            $this->validationAccessForUser($user);
+
+            if ( $user->getId() == $iduser ){
+                $em = $this->getDoctrine()->getManager();
+                $exp = $em->getRepository('ResumeBundle:History')->findOneBy(
+                array('userid' => $user->getId(),'id' => $id));
+
+                $em->remove($exp);
+                $em->flush();
+            }
+            return $this->redirectToRoute('resume_resume_index');
+        }
+
+
     /**
      * @Route("/title/new")
      * @Method({"POST"})
@@ -202,7 +279,7 @@ class ResumeController extends Controller
     protected function createFormProfForAssistantType($idusertype){
       $result = null;
       $classForm = '';
-      
+
       $em = $this->getDoctrine()->getManager();
 
       if ( $idusertype == 1 ){
@@ -323,4 +400,28 @@ class ResumeController extends Controller
 
       return $form;
     }
+
+
+    public function returnPDFResponseFromHTML($html,$user){
+        //set_time_limit(30); uncomment this line according to your needs
+        // If you are not in a controller, retrieve of some way the service container and then retrieve it
+        //$pdf = $this->container->get("white_october.tcpdf")->create('vertical', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        //if you are in a controlller use :
+        $pdf = $this->get("white_october.tcpdf")->create('vertical', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->SetAuthor('Mobcv - CV Management platform');
+        $pdf->SetTitle(('CV'));
+        $pdf->SetSubject('Mobcv - CV Management platform');
+        $pdf->setFontSubsetting(true);
+        $pdf->SetFont('helvetica', '', 10, '', true);
+        //$pdf->SetMargins(20,20,40, true);
+        $pdf->AddPage();
+
+        //$filename = 'cv_'.$user->getUsername();
+        $filename = 'cv_'.$user->getFirstname();
+
+        $pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
+        $pdf->Output($filename.".pdf",'I'); // This will output the PDF as a response directly
+    }
+
+
 }

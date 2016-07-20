@@ -1,0 +1,114 @@
+{% extends "ResumeBundle:Default:panel-postulant-pdf.html.twig" %}
+
+{% block maincontent %}
+<div class="row">
+    <div class="col-lg-12">
+    <h1 class="page-header">Curriculum Vitae</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+      <h3 class="page-header">Información Personal</h3>
+      <div class="caption-full">
+      <!-- TABLE PROFILE -->
+      <table class="table table-bordered">
+        <tr>
+          <th>Rut</th>
+          <td>{{user.rut}}</td>
+        </tr>
+        <tr>
+          <th>Nombre</th>
+          <td>{{user.firstname}} {{user.middlename}} {{user.lastname}} {{user.momlastname}}</td>
+        </tr>
+        <tr>
+          <th>Genero</th>
+          <td>{{user.gender}}</td>
+        </tr>
+        <tr>
+          <th>Fecha de nacimiento</th>
+          <td>{{user.birthdate|date("d-M-Y")}}</td>
+        </tr>
+        <tr>
+          <th colspan="2">Información de Contacto</th>
+        </tr>
+        <tr>
+          <th>Correo</th>
+          <td>{{user.email}}</td>
+        </tr>
+        <tr>
+          <th>Teléfono</th>
+          <td>{{user.phone}}</td>
+        </tr>
+        <tr>
+          <th>Celular</th>
+          <td>{{user.celphone}}</td>
+        </tr>
+      </table>
+      </div>
+      <!-- TABLEEND -->
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+      <h3 class="page-header">Información Profesional</h3>
+      <div class="caption-full">
+      <!-- CONTENT -->
+      {% if titles|length > 0 %}
+        <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Título</th>
+            <th>Año</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for title in titles %}
+          <tr>
+            <td>{{title.name}}</td>
+            <td>{{title.obtaining}}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+      {% endif %}
+      <!-- /CONTENT -->
+      </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+      <h3 class="page-header">Experiencia</h3>
+      <div class="caption-full">
+      <!-- CONTENT -->
+      {% if exps|length > 0 %}
+        <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Trabajo</th>
+            <th>Periodo</th>
+            <th>Detalle</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for exp in exps %}
+          <tr>
+            <td>{{exp.name}}<br>
+            {% if exp.workplace|length > 5 %}
+              <b>{{exp.workplace}}</b>
+            {% else %}
+              <b>{{exp.other}}</b>
+            {% endif %}
+            </td>
+            <td>{{exp.startdate|date('m-Y')}} - {{exp.enddate|date('m-Y')}}</td>
+            <td>{{exp.detail}}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+      {% endif %}
+      <!-- /CONTENT -->
+      </div>
+    </div>
+</div>
+{% endblock %}
