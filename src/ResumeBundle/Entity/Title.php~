@@ -49,6 +49,11 @@ class Title
      */
     private $userid;
 
+    /**
+    * @ORM\OneToMany(targetEntity="History", mappedBy="title")
+    */
+    private $histories;
+
 
     /**
      * Get id
@@ -154,5 +159,9 @@ class Title
     public function getUserid()
     {
         return $this->userid;
+    }
+
+    public function __toString() {
+      return $this->name;
     }
 }

@@ -36,10 +36,14 @@ class Workplace
     private $address;
 
     /**
-    * @ORM\OneToMany(targetEntity="Job", mappedBy="speciality")
+    * @ORM\OneToMany(targetEntity="Job", mappedBy="workplace")
     */
     private $jobs;
 
+    /**
+    * @ORM\OneToMany(targetEntity="History", mappedBy="workplace")
+    */
+    private $history;
 
 
     /**

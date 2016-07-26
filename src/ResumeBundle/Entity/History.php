@@ -35,14 +35,6 @@ class History
      */
     private $detail;
 
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="workplace", type="string", length=100,nullable=true)
-     */
-    private $workplace;
-
     /**
      * @var string
      *
@@ -50,6 +42,17 @@ class History
      */
     private $other;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Title", inversedBy="titles")
+     * @ORM\JoinColumn(name="title_id", referencedColumnName="id")
+     */
+     private $title;
+
+     /**
+      * @ORM\ManyToOne(targetEntity="Workplace", inversedBy="workplaces")
+      * @ORM\JoinColumn(name="workplace_id", referencedColumnName="id")
+      */
+     private $workplace;
 
 
     /**
@@ -284,5 +287,29 @@ class History
     public function getOther()
     {
         return $this->other;
+    }
+
+    /**
+     * Set title
+     *
+     * @param \ResumeBundle\Entity\Title $title
+     *
+     * @return History
+     */
+    public function setTitle(\ResumeBundle\Entity\Title $title = null)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return \ResumeBundle\Entity\Title
+     */
+    public function getTitle()
+    {
+        return $this->title;
     }
 }

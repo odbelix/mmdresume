@@ -36,10 +36,14 @@ class Workplace
     private $address;
 
     /**
-    * @ORM\OneToMany(targetEntity="Job", mappedBy="speciality")
+    * @ORM\OneToMany(targetEntity="Job", mappedBy="workplace")
     */
     private $jobs;
 
+    /**
+    * @ORM\OneToMany(targetEntity="History", mappedBy="workplace")
+    */
+    private $history;
 
 
     /**
@@ -174,5 +178,39 @@ class Workplace
     public function getResponsable()
     {
         return $this->responsable;
+    }
+
+    /**
+     * Add history
+     *
+     * @param \ResumeBundle\Entity\History $history
+     *
+     * @return Workplace
+     */
+    public function addHistory(\ResumeBundle\Entity\History $history)
+    {
+        $this->history[] = $history;
+
+        return $this;
+    }
+
+    /**
+     * Remove history
+     *
+     * @param \ResumeBundle\Entity\History $history
+     */
+    public function removeHistory(\ResumeBundle\Entity\History $history)
+    {
+        $this->history->removeElement($history);
+    }
+
+    /**
+     * Get history
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getHistory()
+    {
+        return $this->history;
     }
 }

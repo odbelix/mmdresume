@@ -2,6 +2,7 @@
 
 {% block csspage %}
 <link href="{{asset('css/bootstrap-datepicker3.css')}}" rel="stylesheet" type="text/css">
+<link href="{{asset('css/bootstrap-switch.min.css')}}" rel="stylesheet" type="text/css">
 {% endblock%}
 
 {% block maincontent %}
@@ -31,7 +32,6 @@
     </div>
 </div>
 {% endif %}
-
 <div class="row">
     <div class="col-lg-12">
       <h3 class="page-header">Información Personal</h3>
@@ -81,39 +81,87 @@
 
 <div class="row">
     <div class="col-lg-12">
+      <h3 class="page-header">Autorizaciones de Docencia</h3>
+    </div>
+    <div class="caption-full">
+      <table class="table">
+      <thead>
+      <tr>
+        <th>Autorización</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Autorización para impartir Religión Catolica</td>
+        <td>
+        {% if file is defined and file is not empty %}
+          {% if file.catholic == 1 %}
+            <input type="checkbox" data-on-text="Si" data-off-text="No" name="checkbox-cat" checked>
+          {% else %}
+            <input type="checkbox" data-on-text="Si" data-off-text="No" name="checkbox-cat">
+          {% endif%}
+        {% else %}
+          <input type="checkbox" data-on-text="Si" data-off-text="No" name="checkbox-cat">
+        {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>Autorización para impartir Religión Evangelica</td>
+        <td>
+        {% if file is defined and file is not empty %}
+          {% if file.evangelical == 1 %}
+            <input type="checkbox" data-on-text="Si" data-off-text="No" name="checkbox-eva" checked></td>
+          {% else %}
+            <input type="checkbox" data-on-text="Si" data-off-text="No" name="checkbox-eva"></td>
+          {% endif%}
+        {% else %}
+          <input type="checkbox" data-on-text="Si" data-off-text="No" name="checkbox-eva"></td>
+        {% endif %}
+        </td>
+      </tr>
+    </tbody>
+    </table>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-12">
       <h3 class="page-header">Información Profesional</h3>
       <div class="text-right">
-        <button class="btn btn-success" data-toggle="modal" data-target="#ModalProf">
-          Agregar
+        <button class="btn btn-success" data-toggle="modal" data-target="#ModalProfBasic">
+          Agregar Título Educación Básica
+        </button>
+        <button class="btn btn-success" data-toggle="modal" data-target="#ModalProfHigh">
+          Agregar Título Educación Media
         </button>
       </div>
       <!-- MODAL FOR NEW EXP-->
-      <div class="modal fade" id="ModalProf" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                                {{ form_start(new_form_prof)}}
+      <div class="modal fade" id="ModalProfHigh" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                {{ form_start(new_form_profhigh,{'attr':{'onsubmit':'return validateForm(this)'}})}}
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                            <h4 class="modal-title" id="myModalLabel">Nuevo Título</h4>
+                                            <h4 class="modal-title" id="myModalLabel">Nuevo Título Educación Media</h4>
                                         </div>
 
                                         <div class="modal-body">
                                             <!-- FORM -->
-                                            {{ form_start(new_form_prof)}}
                                             <div class="form-group">
-                                            <label>{{form_label(new_form_prof.title)}}</label>
-                                            {{ form_widget(new_form_prof.title,{ 'attr': {'class': 'form-control'} }) }}
+                                            <label>{{form_label(new_form_profhigh.title)}}</label>
+                                            {{ form_widget(new_form_profhigh.title,{ 'attr': {'class': 'form-control'} }) }}
                                             </div>
                                             <div class="form-group">
-                                            <label>{{form_label(new_form_prof.obtaining)}}</label>
-                                            {{ form_widget(new_form_prof.obtaining)}}
+                                            <label>{{form_label(new_form_profhigh.obtaininghigh)}}</label>
+                                            {{ form_widget(new_form_profhigh.obtaininghigh)}}
                                             </div>
                                             <div class="form-group">
-                                            <label>{{form_label(new_form_prof.other)}}</label>
-                                            {{ form_widget(new_form_prof.other,{ 'attr': {'class': 'form-control', 'max':'9999' }}) }}
+                                            <label>{{form_label(new_form_profhigh.other)}}</label>
+                                            {{ form_widget(new_form_profhigh.other,{ 'attr': {'class': 'form-control', 'max':'9999' }}) }}
                                             </div>
 
-                                            {{ form_end(new_form_prof)}}
                                             <!-- FORMEND -->
                                         </div>
                                         <div class="modal-footer">
@@ -123,7 +171,43 @@
                                     </div>
                                     <!-- /.modal-content -->
                                 </div>
-                                {{ form_end(new_form_prof)}}
+                                {{ form_end(new_form_profhigh)}}
+                                <!-- /.modal-dialog -->
+      </div>
+      <div class="modal fade" id="ModalProfBasic" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                {{ form_start(new_form_profbasic,{'attr':{'onsubmit':'return validateForm(this)'}})}}
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                            <h4 class="modal-title" id="myModalLabel">Nuevo Título Educación Básica</h4>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <!-- FORM -->
+                                            <div class="form-group">
+                                            <label>{{form_label(new_form_profbasic.title)}}</label>
+                                            {{ form_widget(new_form_profbasic.title,{ 'attr': {'class': 'form-control'} }) }}
+                                            </div>
+                                            <div class="form-group">
+                                            <label>{{form_label(new_form_profbasic.obtainingbasic)}}</label>
+                                            {{ form_widget(new_form_profbasic.obtainingbasic)}}
+                                            </div>
+                                            <div class="form-group">
+                                            <label>{{form_label(new_form_profbasic.other)}}</label>
+                                            {{ form_widget(new_form_profbasic.other,{ 'attr': {'class': 'form-control', 'max':'9999' }}) }}
+                                            </div>
+
+                                            <!-- FORMEND -->
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Guardar</button>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                {{ form_end(new_form_profhigh)}}
                                 <!-- /.modal-dialog -->
       </div>
       <!-- ENDMODAL -->
@@ -167,20 +251,19 @@
       </div>
       <!-- MODAL FOR NEW EXP-->
       <div class="modal fade" id="ModalExp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                                {{ form_start(new_form_exp)}}
+                                {{ form_start(new_form_exp,{'attr':{'onsubmit':'return validateForm()'}})}}
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                            <h4 class="modal-title" id="myModalLabel">Nuevo Título</h4>
+                                            <h4 class="modal-title" id="myModalLabel">Nueva Experiencia</h4>
                                         </div>
 
                                         <div class="modal-body">
                                             <!-- FORM -->
-                                            {{ form_start(new_form_prof)}}
                                             <div class="form-group">
-                                            <label>{{form_label(new_form_exp.name)}}</label>
-                                            {{ form_widget(new_form_exp.name,{ 'attr': {'class': 'form-control'} }) }}
+                                            <label>{{form_label(new_form_exp.title)}}</label>
+                                            {{ form_widget(new_form_exp.title,{ 'attr': {'class': 'form-control'} }) }}
                                             </div>
                                             <div class="form-group">
                                             <label>{{form_label(new_form_exp.detail)}}</label>
@@ -203,7 +286,6 @@
                                             {{ form_widget(new_form_exp.enddate) }}
                                             </div>
 
-                                            {{ form_end(new_form_prof)}}
                                             <!-- FORMEND -->
                                         </div>
                                         <div class="modal-footer">
@@ -216,7 +298,6 @@
                                 {{ form_end(new_form_exp)}}
                                 <!-- /.modal-dialog -->
       </div>
-
       <!-- ENDMODAL -->
       <div class="caption-full">
       <!-- CONTENT -->
@@ -260,11 +341,44 @@
 
 
 {% block scriptpage %}
+<script src="{{asset('js/bootstrap-switch.min.js')}}"></script>
 <script src="{{asset('js/bootstrap-datepicker.js')}}"></script>
 <script src="{{asset('js/bootstrap-datepicker.es.min.js')}}"></script>
 <script type="text/javascript">
+
+$("[name='checkbox-cat']").bootstrapSwitch();
+$("[name='checkbox-eva']").bootstrapSwitch();
+
+$("[name='checkbox-cat']").on('switchChange.bootstrapSwitch', function () {
+    var path = "{{path('resume_resume_catset', { 'value': 'DATA' }) }}"
+    var url = path.replace("DATA",$("[name='checkbox-cat']").bootstrapSwitch('state'));
+    $.ajax({
+    url: url,
+    }).done(function() {
+
+    });
+});
+
+$("[name='checkbox-eva']").on('switchChange.bootstrapSwitch', function () {
+    var path = "{{path('resume_resume_evaset', { 'value': 'DATA' }) }}"
+    var url = path.replace("DATA",$("[name='checkbox-eva']").bootstrapSwitch('state'));
+    $.ajax({
+    url: url,
+    }).done(function() {
+
+    });
+});
+
+
 $(function () {
-  $('#form_obtaining').datepicker({
+  $('#form_obtainingbasic').datepicker({
+    //language: 'es',
+    //format : 'yyyy'
+    format: "yyyy", // Notice the Extra space at the beginning
+    viewMode: "years",
+    minViewMode: "years"
+  });
+  $('#form_obtaininghigh').datepicker({
     //language: 'es',
     //format : 'yyyy'
     format: "yyyy", // Notice the Extra space at the beginning
@@ -277,5 +391,13 @@ $(function () {
     $('.confirmation').on('click', function () {
         return confirm('¿Esta seguro que desea eliminar?');
     });
+</script>
+<script type="text/javascript">
+  function validateForm(form) {
+    if (form.elements.namedItem("form[title]").value == 0 && form.elements.namedItem("form[other]").value.length < 5 ){
+      alert("Debe seleccionar un Título  o Escribir ingresar Otro");
+      return false;
+    }
+  }
 </script>
 {% endblock%}

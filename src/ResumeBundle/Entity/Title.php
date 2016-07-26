@@ -49,6 +49,11 @@ class Title
      */
     private $userid;
 
+    /**
+    * @ORM\OneToMany(targetEntity="History", mappedBy="title")
+    */
+    private $histories;
+
 
     /**
      * Get id
@@ -158,5 +163,46 @@ class Title
 
     public function __toString() {
       return $this->name;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add history
+     *
+     * @param \ResumeBundle\Entity\History $history
+     *
+     * @return Title
+     */
+    public function addHistory(\ResumeBundle\Entity\History $history)
+    {
+        $this->histories[] = $history;
+
+        return $this;
+    }
+
+    /**
+     * Remove history
+     *
+     * @param \ResumeBundle\Entity\History $history
+     */
+    public function removeHistory(\ResumeBundle\Entity\History $history)
+    {
+        $this->histories->removeElement($history);
+    }
+
+    /**
+     * Get histories
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getHistories()
+    {
+        return $this->histories;
     }
 }

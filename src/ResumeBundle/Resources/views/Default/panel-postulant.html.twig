@@ -75,7 +75,11 @@
 
                 <div class="list-group">
                     <a href="{{path('resume_profile_show')}}" class="list-group-item disable {{profileclass}}">Perfil</a>
-                    <a href="{{path('resume_resume_index')}}" class="list-group-item {{resumeclass}}">Mi CV</a>
+                    {% if is_granted('ROLE_TEACHER') %}
+                      <a href="{{path('resume_resume_teacher')}}" class="list-group-item {{resumeclass}}">Mi CV</a>
+                    {% else %}
+                      <a href="{{path('resume_resume_index')}}" class="list-group-item {{resumeclass}}">Mi CV</a>
+                    {% endif %}
                     <a href="#" class="list-group-item {{assignmentclass}}">Asignaciones</a>
                     <a href="{{path('fos_user_security_logout')}}" class="list-group-item">
                     <span class="btn btn-danger">Salir</span>
@@ -86,7 +90,14 @@
             <div class="col-md-9">
               <div class="thumbnail">
               {# VALIDATION OF PROFILE FISRT CHANGES#}
-              {% if app.user.firstname is empty and PATH == 'resume_default_panelpostulant' %}
+              {% set option = 0 %}
+              {% if PATH == 'resume_default_panelpostulant' and app.user.firstname is empty %}
+                {% set option = 1 %}
+              {% endif%}
+              {% if is_granted('ROLE_TEACHER') == false and is_granted('ROLE_ASSISTANT') == false %}
+                {% set option = 1 %}
+              {% endif %}
+              {% if option == 1 %}
                 <div class="alert alert-info alert-dismissable">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                     Hola {{app.user.username}},<br>Antes de continuar debes completar la información personal de tu Perfil. Esto lo puedes realizar.<br>
@@ -103,6 +114,7 @@
                     {% endif %}
                 </div>
                {% endif %}
+
 
                {% block maincontent %}
                {% endblock %}

@@ -46,6 +46,80 @@ class PostulantController extends Controller
   }
 
   /**
+   * @Route("/teacher/profile/{teacherid}",name="panel_postulant_teacher_profile")
+   * @Method({"GET"})
+   */
+  public function showTeacherAction($teacherid)
+  {
+    //Validation
+    $user = $this->getUser();
+    if (!is_object($user)) {
+        return $this->render('ResumeBundle:Default:index.html.twig');
+    }
+
+    $em = $this->getDoctrine()->getEntityManager();
+
+    $message = "";
+
+    $file = null;
+    $history = null;
+    $titles = null;
+
+
+    $teacher = $em->getRepository('ResumeBundle:User')->findOneById($teacherid);
+    $file = $em->getRepository('ResumeBundle:TeacherFile')->findOneByTeacher($teacher->getUsername());
+    $history = $em->getRepository('ResumeBundle:History')->findBy(
+    array('userid' => $teacherid), array('startdate' => 'DESC'));
+
+    $titles = $em->getRepository('ResumeBundle:Title')->findBy(
+    array('userid' => $teacherid), array('obtaining' => 'DESC'));
+
+    return $this->render('postulant/teacher-profile.html.twig',array(
+        'teacher' => $teacher,
+        'file' => $file,
+        'titles' => $titles,
+        'experiences' => $history
+    ));
+  }
+
+
+  /**
+   * @Route("/asistant/profile/{assistantid}",name="panel_postulant_assistant_profile")
+   * @Method({"GET"})
+   */
+  public function showAssistantAction($assistantid)
+  {
+    //Validation
+    $user = $this->getUser();
+    if (!is_object($user)) {
+        return $this->render('ResumeBundle:Default:index.html.twig');
+    }
+
+    $em = $this->getDoctrine()->getEntityManager();
+
+    $message = "";
+
+    $history = null;
+    $titles = null;
+
+
+    $assistant = $em->getRepository('ResumeBundle:User')->findOneById($assistantid);
+    $history = $em->getRepository('ResumeBundle:History')->findBy(
+    array('userid' => $assistantid), array('startdate' => 'DESC'));
+
+    $titles = $em->getRepository('ResumeBundle:Title')->findBy(
+    array('userid' => $assistantid), array('obtaining' => 'DESC'));
+
+    return $this->render('postulant/assistant-profile.html.twig',array(
+        'assistant' => $assistant,
+        'titles' => $titles,
+        'experiences' => $history
+    ));
+  }
+
+
+
+  /**
    * @Route("/assistants",name="panel_postulant_assistants")
    * @Method({"GET","POST"})
    */

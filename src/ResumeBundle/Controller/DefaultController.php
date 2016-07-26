@@ -84,7 +84,7 @@ class DefaultController extends Controller
       if($type == 1) {
         $userManipulator->addRole($username,"ROLE_TEACHER");
         $userdb->setUsertype($teachername);
-        $userdb->setUsertypeid($teachername);
+        $userdb->setUsertypeid($teachernameid);
       }
       else {
         # code...
@@ -104,12 +104,12 @@ class DefaultController extends Controller
         if($type == 5) {
             //$userdb->setUsertype(￼$professional);
             //$userdb->setUsertypeid(￼$professionalid);
-            var_dump($professional);
             $userdb->setUsertype($professional);
             $userdb->setUsertypeid($professionalid);
         }
 
       }
+
       $this->reloadUserPermissions();
       $em->persist($userdb);
       $em->flush();

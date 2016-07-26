@@ -84,7 +84,7 @@
                         <td>{{ teacher.lastlogin|date('Y-m-d H:i:s')}}</td>
                         <td class="btn-group-wrap">
                           <div class="btn-group button-in-table" role="group" aria-label="...">
-                            <a class="btn btn-default" href="{{ path('panel_assistant_show', { 'id': teacher.id }) }}">Ver</a>
+                            <a class="btn btn-default" href="{{ path('panel_postulant_teacher_profile', { 'teacherid': teacher.id }) }}">Ver</a>
                           </div>
                         </td>
                     </tr>

@@ -100,28 +100,28 @@ class TeacherFile
     {
         return $this->evangelical;
     }
-    
+
     /**
-     * Set teacher
+     * Set teacherid
      *
-     * @param string $teacher
+     * @param integer $teacherid
      *
      * @return TeacherFile
      */
-    public function setTeacher($teacher)
+    public function setTeacherid($teacherid)
     {
-        $this->teacher = $teacher;
+        $this->teacherid = $teacherid;
 
         return $this;
     }
 
     /**
-     * Get teacher
+     * Get teacherid
      *
-     * @return string
+     * @return integer
      */
-    public function getTeacher()
+    public function getTeacherid()
     {
-        return $this->teacher;
+        return $this->teacherid;
     }
 }

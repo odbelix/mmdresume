@@ -2,7 +2,6 @@
 {% if is_granted('ROLE_TEACHER') or is_granted('ROLE_ASSISTANT') %}
   {% set THEME = "ResumeBundle:Default:panel-postulant.html.twig" %}
 {% endif %}
-
 {% extends THEME %}
 
 {% block maincontent %}
