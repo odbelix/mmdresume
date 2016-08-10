@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use ResumeBundle\Entity\Job;
+use ResumeBundle\Entity\Usertype;
 use ResumeBundle\Form\JobType;
 use ResumeBundle\Controller\InfotextController;
 
@@ -22,17 +23,31 @@ class JobController extends Controller
      * Lists all Job entities.
      *
      * @Route("/", name="panel_job_index")
-     * @Method("GET")
+     * @Method({"GET","POST"})
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        if ($request->isMethod('POST')) {
+          $this->addFlash(
+            'notice',
+            'La información fue guardada con exito'
+          );
+          return $this->redirectToRoute('panel_job_index');
+        }
+
 
         $jobs = $em->getRepository('ResumeBundle:Job')->findAll();
+        $usertypes = $em->getRepository('ResumeBundle:Usertype')->findAll();
+
+        $job = new Job();
+        $form = $this->createForm('ResumeBundle\Form\JobType', $job);
+
 
         return $this->render('job/index.html.twig', array(
             'jobs' => $jobs,
-            'menu' => $this->getMyMenu(),
+            'form' => $form->createView(),
+            'usertypes' => $usertypes,
         ));
     }
 

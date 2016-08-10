@@ -3,47 +3,249 @@
 {% block maincontent %}
 <div class="row">
     <div class="col-lg-12">
-    <h1 class="page-header">Título Profesional</h1>
+    <h1 class="page-header">Títulos y Profesiones</h1>
     </div>
     <!-- /.col-lg-12 -->
 </div>
 <div class="row">
-  <div class="col-lg-12">
+    <div class="col-lg-12">
       <div class="panel panel-default">
-        <div class="panel-heading">Lista de <b>Profesiones</b> creadas en la Plataforma para los Asistentes de Educación
-        <a class="btn btn-default" href="{{ path('panel_profession_new') }}">Nuevo</a>
+        <div class="panel-heading">Gestión de Títulos y Profesiones para Postulantes
         </div>
         <div class="panel-body">
-        {% include "ResumeBundle:Utils:search-table-searchbar.html.twig" %}
-            <table class="table table-bordered results">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Nombre</th>
-                    <th>Opciones</th>
-                </tr>
-                {% set columns = 3 %}
-                {% include "ResumeBundle:Utils:search-table-trresult.html.twig" %}
-            </thead>
-            <tbody>
-            {% set count = 1 %}
-            {% for profession in professions %}
-            <tr>
-                <td><a href="{{ path('panel_profession_show', { 'id': profession.id }) }}">{{ count }}</a></td>
-                <td>{{ profession.name }}</td>
-                <td>
-                  <a class="btn btn-default" href="{{ path('panel_profession_edit', { 'id': profession.id }) }}">Editar</a>
-                </td>
-             </tr>
-             {% set count = count + 1 %}
-             {% endfor %}
-          </tbody>
-          </table>
+
+        <!-- MESSAGES -->
+        {% set teacherCollapse = '' %}
+        {% set techtopCollapse = '' %}
+        {% set techmidCollapse = '' %}
+        {% set professionalCollapse = '' %}
+
+        {% for flash_message in app.session.flashBag.get('show') %}
+          {% if flash_message == 'teacher' %}
+            {% set teacherCollapse = 'in' %}
+          {% endif %}
+          {% if flash_message == 'techtop' %}
+            {% set techtopCollapse = 'in' %}
+          {% endif %}
+          {% if flash_message == 'teachmid' %}
+            {% set techmidCollapse = 'in' %}
+          {% endif %}
+          {% if flash_message == 'professional' %}
+            {% set professionalCollapse = 'in' %}
+          {% endif %}
+
+        {% endfor %}
+
+        {% for flash_message in app.session.flashBag.get('notice') %}
+        <div class="row">
+            <div class="col-lg-12">
+            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                {{ flash_message }}
+                            </div>
+
+            </div>
+        </div>
+        {% endfor %}
+        <!-- MESSAGES --->
+
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="text-right">
+              <button class="btn btn-primary" data-toggle="modal" data-target="#myModalNewTitle">
+                Nuevo Título/Profesión
+              </button>
+            </div>
+            <!-- MODAL -->
+            <div class="modal fade" id="myModalNewTitle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog">
+        	<div class="modal-content">
+        	         <div class="modal-header">
+        	                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                 <h4 class="modal-title" id="myModalLabel">Nuevo Título/Profesional</h4>
+			              </div>
+                    {{ form_start(form) }}
+                    <div class="modal-body">
+				                     <!-- FORM FOR NEW PROFESSION -->
+                             {{ form_widget(form) }}
+                             <!-- FORM FOR NEW PROFESSION -->
+                     </div>
+                     <div class="modal-footer">
+	                       <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                         <button type="submit" class="btn btn-primary">Crear</button>
+                      </div>
+                      {{ form_end(form) }}
+                 </div>
+                 <!-- /.modal-content -->
+         </div>
+         <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+            <!-- MODAL -->
           </div>
         </div>
+        <hr>
+
+        <!-- MAIN CONTEXT -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseTeacher" aria-expanded="true" class="">Docentes</a>
+                  </div>
+                  <div id="collapseTeacher" class="panel-collapse collapse {{teacherCollapse}}" aria-expanded="true" style="">
+	                   <div class="panel-body">
+
+                     <!-- TABLE -->
+                     {% include "ResumeBundle:Utils:search-table-searchbar.html.twig" %}
+                         <table class="table table-striped results">
+                         <thead>
+                             <tr>
+                                 <th>#</th>
+                                 <th>Nombre</th>
+                                 <th>Opciones</th>
+                             </tr>
+                             {% set columns = 3 %}
+                             {% include "ResumeBundle:Utils:search-table-trresult.html.twig" %}
+                         </thead>
+                         <tbody>
+                         {% set count = 1 %}
+                         {% for teacher in teachers %}
+                         <tr>
+                             <td><a href="{{ path('panel_profession_show', { 'id': teacher.id }) }}">{{ count }}</a></td>
+                             <td>{{ teacher.name }}</td>
+                             <td>
+                               <a class="btn btn-default" href="{{ path('panel_profession_edit', { 'id': teacher.id }) }}">Editar</a>
+                               <a class="btn btn-danger" href="{{ path('panel_profession_delete_one', { 'id': teacher.id }) }}">Eliminar</a>
+                             </td>
+                          </tr>
+                          {% set count = count + 1 %}
+                          {% endfor %}
+                       </tbody>
+                       </table>
+                     <!-- TABLE -->
+
+                     </div>
+                  </div>
+                </div>
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseProfessional" aria-expanded="true" class="">Profesional</a>
+                  </div>
+                  <div id="collapseProfessional" class="panel-collapse collapse {{professionalCollapse}}" aria-expanded="true" style="">
+	                   <div class="panel-body">
+                     <!-- TABLE -->
+                     {% include "ResumeBundle:Utils:search-table-searchbar.html.twig" %}
+                         <table class="table table-striped results">
+                         <thead>
+                             <tr>
+                                 <th>#</th>
+                                 <th>Nombre</th>
+                                 <th>Opciones</th>
+                             </tr>
+                             {% set columns = 3 %}
+                             {% include "ResumeBundle:Utils:search-table-trresult.html.twig" %}
+                         </thead>
+                         <tbody>
+                         {% set count = 1 %}
+                         {% for professional in professionals %}
+                         <tr>
+                             <td><a href="{{ path('panel_profession_show', { 'id': professional.id }) }}">{{ count }}</a></td>
+                             <td>{{ professional.name }}</td>
+                             <td>
+                               <a class="btn btn-default" href="{{ path('panel_profession_edit', { 'id': professional.id }) }}">Editar</a>
+                               <a class="btn btn-danger" href="{{ path('panel_profession_delete_one', { 'id': professional.id }) }}">Eliminar</a>
+                             </td>
+                          </tr>
+                          {% set count = count + 1 %}
+                          {% endfor %}
+                       </tbody>
+                       </table>
+                     <!-- TABLE -->
+                     </div>
+                  </div>
+                </div>
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseTechtop" aria-expanded="true" class="">Técnico nivel superior</a>
+                  </div>
+                  <div id="collapseTechtop" class="panel-collapse collapse {{techtopCollapse}}" aria-expanded="true" style="">
+	                   <div class="panel-body">
+                     <!-- TABLE -->
+                     {% include "ResumeBundle:Utils:search-table-searchbar.html.twig" %}
+                         <table class="table table-striped results">
+                         <thead>
+                             <tr>
+                                 <th>#</th>
+                                 <th>Nombre</th>
+                                 <th>Opciones</th>
+                             </tr>
+                             {% set columns = 3 %}
+                             {% include "ResumeBundle:Utils:search-table-trresult.html.twig" %}
+                         </thead>
+                         <tbody>
+                         {% set count = 1 %}
+                         {% for techtop in techtops %}
+                         <tr>
+                             <td><a href="{{ path('panel_profession_show', { 'id': techtop.id }) }}">{{ count }}</a></td>
+                             <td>{{ techtop.name }}</td>
+                             <td>
+                               <a class="btn btn-default" href="{{ path('panel_profession_edit', { 'id': techtop.id }) }}">Editar</a>
+                               <a class="btn btn-danger" href="{{ path('panel_profession_delete_one', { 'id': techtop.id }) }}">Eliminar</a>
+                             </td>
+                          </tr>
+                          {% set count = count + 1 %}
+                          {% endfor %}
+                       </tbody>
+                       </table>
+                     <!-- TABLE -->
+                     </div>
+                  </div>
+                </div>
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseTechmid" aria-expanded="true" class="">Técnico nivel medio</a>
+                  </div>
+                  <div id="collapseTechmid" class="panel-collapse collapse {{techmidCollapse}}" aria-expanded="true" style="">
+	                   <div class="panel-body">
+                     <!-- TABLE -->
+                     {% include "ResumeBundle:Utils:search-table-searchbar.html.twig" %}
+                         <table class="table table-striped results">
+                         <thead>
+                             <tr>
+                                 <th>#</th>
+                                 <th>Nombre</th>
+                                 <th>Opciones</th>
+                             </tr>
+                             {% set columns = 3 %}
+                             {% include "ResumeBundle:Utils:search-table-trresult.html.twig" %}
+                         </thead>
+                         <tbody>
+                         {% set count = 1 %}
+                         {% for techmid in techmids %}
+                         <tr>
+                             <td><a href="{{ path('panel_profession_show', { 'id': techmid.id }) }}">{{ count }}</a></td>
+                             <td>{{ techmid.name }}</td>
+                             <td>
+                               <a class="btn btn-default" href="{{ path('panel_profession_edit', { 'id': techmid.id }) }}">Editar</a>
+                               <a class="btn btn-danger" href="{{ path('panel_profession_delete_one', { 'id': techmid.id }) }}">Eliminar</a>
+                             </td>
+                          </tr>
+                          {% set count = count + 1 %}
+                          {% endfor %}
+                       </tbody>
+                       </table>
+                     <!-- TABLE -->
+                     </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+        <!-- MAIN CONTENT END -->
+        </div>
+      </div>
     </div>
 </div>
-
 {% endblock %}
 
 

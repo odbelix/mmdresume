@@ -50,9 +50,9 @@ class Title
     private $userid;
 
     /**
-    * @ORM\OneToMany(targetEntity="History", mappedBy="title")
+    * @ORM\OneToMany(targetEntity="Experience", mappedBy="title")
     */
-    private $histories;
+    private $experiences;
 
 
     /**
@@ -163,5 +163,80 @@ class Title
 
     public function __toString() {
       return $this->name;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add history
+     *
+     * @param \ResumeBundle\Entity\History $history
+     *
+     * @return Title
+     */
+    public function addHistory(\ResumeBundle\Entity\History $history)
+    {
+        $this->histories[] = $history;
+
+        return $this;
+    }
+
+    /**
+     * Remove history
+     *
+     * @param \ResumeBundle\Entity\History $history
+     */
+    public function removeHistory(\ResumeBundle\Entity\History $history)
+    {
+        $this->histories->removeElement($history);
+    }
+
+    /**
+     * Get histories
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getHistories()
+    {
+        return $this->histories;
+    }
+
+    /**
+     * Add experience
+     *
+     * @param \ResumeBundle\Entity\Experience $experience
+     *
+     * @return Title
+     */
+    public function addExperience(\ResumeBundle\Entity\Experience $experience)
+    {
+        $this->experiences[] = $experience;
+
+        return $this;
+    }
+
+    /**
+     * Remove experience
+     *
+     * @param \ResumeBundle\Entity\Experience $experience
+     */
+    public function removeExperience(\ResumeBundle\Entity\Experience $experience)
+    {
+        $this->experiences->removeElement($experience);
+    }
+
+    /**
+     * Get experiences
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getExperiences()
+    {
+        return $this->experiences;
     }
 }

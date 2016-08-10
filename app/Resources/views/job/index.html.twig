@@ -13,9 +13,73 @@
   <div class="col-lg-12">
       <div class="panel panel-default">
         <div class="panel-heading">Lista de <b>Trabajos</b> creados en la Plataforma
-        <a class="btn btn-default" href="{{ path('panel_job_new') }}">Nuevo</a>
         </div>
         <div class="panel-body">
+        {% for flash_message in app.session.flashBag.get('notice') %}
+        <div class="row">
+            <div class="col-lg-12">
+            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                {{ flash_message }}
+                            </div>
+
+            </div>
+        </div>
+        {% endfor %}
+
+          <div class="row">
+            <div class="col-lg-6">
+            <!-- NEWJOB MODAL -->
+
+            <!-- MODAL -->
+              <div class="modal fade" id="myModalNewJob" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+              <div class="modal-dialog">
+                      <div class="modal-content">
+                               <div class="modal-header">
+                                       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                             <h4 class="modal-title" id="myModalLabel">Nuevo Título/Profesional</h4>
+                                </div>
+                                {{ form_start(form) }}
+                                <div class="modal-body">
+                                         <!-- FORM FOR NEW JOB -->
+                                         {{ form_widget(form) }}
+                                         <!-- FORM FOR NEW JOB -->
+                                 </div>
+                                 <div class="modal-footer">
+                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                     <button type="submit" class="btn btn-primary">Crear</button>
+                                  </div>
+                                  {{ form_end(form) }}
+                             </div>
+                             <!-- /.modal-content -->
+                     </div>
+                     <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+            <!-- MODAL -->
+
+            <!-- NEWJOB MODAL -->
+            </div>
+            <div class="col-lg-3">
+              <select name="usertype" id="usertype" class="form-control">
+              <option value="0">Seleccionar tipo de Postulante</option>
+              {% for data in usertypes %}
+                <option value="{{data.id}}">{{data.name}}</option>
+              {% endfor %}
+              </select>
+            </div>
+            <div class="col-lg-3">
+              <div class="text-right">
+                <button name="newbutton" id="newbutton" disabled class="btn form-control" data-toggle="modal" data-target="#myModalNewJob">
+                  Nuevo Trabajo
+                </button>
+              </div>
+            </div>
+          </div>
+          <hr>
+
+
+
             {% include "ResumeBundle:Utils:search-table-searchbar.html.twig" %}
             <table class="table table-bordered table-hover results">
                 <thead>
@@ -58,4 +122,17 @@
 
 {% block scriptpage %}
 <script src="{{asset('js/search-bar-tables.js')}}"></script>
+<script>
+$( "#usertype" ).change(function() {
+  if ( $(this).val() != 0 ){
+    $( "#newbutton" ).prop('disabled', false);
+    $( "#newbutton" ).addClass('btn-primary');
+  }
+  else {
+    $( "#newbutton" ).prop('disabled', true);
+    $( "#newbutton" ).removeClass('btn-primary');
+  }
+});
+</script>
+
 {% endblock %}

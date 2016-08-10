@@ -5,8 +5,9 @@ namespace ResumeBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
-class ProfessionType extends AbstractType
+class UsertypeType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -16,7 +17,8 @@ class ProfessionType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('usertype')
+            ->add('detail',TextareaType::class, array(
+              'attr' => array('class' => 'tinymce','class' => 'textbox','maxlength' => 255)))
         ;
     }
 
@@ -26,7 +28,7 @@ class ProfessionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'ResumeBundle\Entity\Profession'
+            'data_class' => 'ResumeBundle\Entity\Usertype'
         ));
     }
 }

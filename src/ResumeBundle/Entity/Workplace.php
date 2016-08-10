@@ -41,9 +41,9 @@ class Workplace
     private $jobs;
 
     /**
-    * @ORM\OneToMany(targetEntity="History", mappedBy="workplace")
+    * @ORM\OneToMany(targetEntity="Experience", mappedBy="workplace")
     */
-    private $history;
+    private $experiences;
 
 
     /**
@@ -212,5 +212,39 @@ class Workplace
     public function getHistory()
     {
         return $this->history;
+    }
+
+    /**
+     * Add experience
+     *
+     * @param \ResumeBundle\Entity\Experience $experience
+     *
+     * @return Workplace
+     */
+    public function addExperience(\ResumeBundle\Entity\Experience $experience)
+    {
+        $this->experiences[] = $experience;
+
+        return $this;
+    }
+
+    /**
+     * Remove experience
+     *
+     * @param \ResumeBundle\Entity\Experience $experience
+     */
+    public function removeExperience(\ResumeBundle\Entity\Experience $experience)
+    {
+        $this->experiences->removeElement($experience);
+    }
+
+    /**
+     * Get experiences
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getExperiences()
+    {
+        return $this->experiences;
     }
 }

@@ -97,19 +97,27 @@ class Job
     private $hours;
 
 
-
-
     /**
-     * @ORM\ManyToOne(targetEntity="Speciality", inversedBy="jobs")
-     * @ORM\JoinColumn(name="speciality_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Profession", inversedBy="jobs")
+     * @ORM\JoinColumn(name="profession_id", referencedColumnName="id")
      */
-     private $speciality;
+     private $profession;
 
      /**
-      * @ORM\ManyToOne(targetEntity="Workplace", inversedBy="workplaces")
+      * @ORM\ManyToOne(targetEntity="Workplace", inversedBy="jobs")
       * @ORM\JoinColumn(name="workplace_id", referencedColumnName="id")
       */
      private $workplace;
+
+
+     /**
+     * @ORM\OneToMany(targetEntity="Assigment", mappedBy="job")
+     */
+     private $assigments;
+
+
+
+
 
 
     /**
@@ -240,30 +248,6 @@ class Job
     public function getUsername()
     {
         return $this->username;
-    }
-
-    /**
-     * Set speciality
-     *
-     * @param \ResumeBundle\Entity\Speciality $speciality
-     *
-     * @return Job
-     */
-    public function setSpeciality(\ResumeBundle\Entity\Speciality $speciality = null)
-    {
-        $this->speciality = $speciality;
-
-        return $this;
-    }
-
-    /**
-     * Get speciality
-     *
-     * @return \ResumeBundle\Entity\Speciality
-     */
-    public function getSpeciality()
-    {
-        return $this->speciality;
     }
 
     /**
@@ -423,5 +407,70 @@ class Job
     public function getVersion()
     {
         return $this->version;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->assigments = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set profession
+     *
+     * @param \ResumeBundle\Entity\Profession $profession
+     *
+     * @return Job
+     */
+    public function setProfession(\ResumeBundle\Entity\Profession $profession = null)
+    {
+        $this->profession = $profession;
+
+        return $this;
+    }
+
+    /**
+     * Get profession
+     *
+     * @return \ResumeBundle\Entity\Profession
+     */
+    public function getProfession()
+    {
+        return $this->profession;
+    }
+
+    /**
+     * Add assigment
+     *
+     * @param \ResumeBundle\Entity\Assigment $assigment
+     *
+     * @return Job
+     */
+    public function addAssigment(\ResumeBundle\Entity\Assigment $assigment)
+    {
+        $this->assigments[] = $assigment;
+
+        return $this;
+    }
+
+    /**
+     * Remove assigment
+     *
+     * @param \ResumeBundle\Entity\Assigment $assigment
+     */
+    public function removeAssigment(\ResumeBundle\Entity\Assigment $assigment)
+    {
+        $this->assigments->removeElement($assigment);
+    }
+
+    /**
+     * Get assigments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAssigments()
+    {
+        return $this->assigments;
     }
 }

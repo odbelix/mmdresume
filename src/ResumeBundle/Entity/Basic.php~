@@ -5,12 +5,12 @@ namespace ResumeBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Type
+ * Basic
  *
- * @ORM\Table(name="type")
- * @ORM\Entity(repositoryClass="ResumeBundle\Repository\TypeRepository")
+ * @ORM\Table(name="basic")
+ * @ORM\Entity(repositoryClass="ResumeBundle\Repository\BasicRepository")
  */
-class Type
+class Basic
 {
     /**
      * @var int
@@ -44,7 +44,7 @@ class Type
      *
      * @param string $name
      *
-     * @return Type
+     * @return Basic
      */
     public function setName($name)
     {
@@ -61,5 +61,10 @@ class Type
     public function getName()
     {
         return $this->name;
+    }
+
+
+    public function __toString() {
+      return $this->name;
     }
 }

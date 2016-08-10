@@ -97,6 +97,17 @@ class User extends BaseUser
     protected $usertypeid;
 
 
+
+    /**
+    * @ORM\OneToMany(targetEntity="Assigment", mappedBy="user")
+    */
+    private $assigments;
+
+    /**
+    * @ORM\OneToMany(targetEntity="Experience", mappedBy="user")
+    */
+    private $experiences;
+
     /**
      * Set firstname
      *
@@ -431,5 +442,39 @@ class User extends BaseUser
     public function getUsertypeid()
     {
         return $this->usertypeid;
+    }
+
+    /**
+     * Add assigment
+     *
+     * @param \ResumeBundle\Entity\Assigment $assigment
+     *
+     * @return User
+     */
+    public function addAssigment(\ResumeBundle\Entity\Assigment $assigment)
+    {
+        $this->assigments[] = $assigment;
+
+        return $this;
+    }
+
+    /**
+     * Remove assigment
+     *
+     * @param \ResumeBundle\Entity\Assigment $assigment
+     */
+    public function removeAssigment(\ResumeBundle\Entity\Assigment $assigment)
+    {
+        $this->assigments->removeElement($assigment);
+    }
+
+    /**
+     * Get assigments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAssigments()
+    {
+        return $this->assigments;
     }
 }

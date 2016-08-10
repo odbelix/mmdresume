@@ -7,8 +7,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use ResumeBundle\Entity\Profession;
+use ResumeBundle\Entity\Usertype;
 use ResumeBundle\Form\ProfessionType;
 use ResumeBundle\Controller\InfotextController;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
  * Profession controller.
@@ -21,16 +24,68 @@ class ProfessionController extends Controller
      * Lists all Profession entities.
      *
      * @Route("/", name="panel_profession_index")
-     * @Method("GET")
+     * @Method({"GET","POST"})
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        if ($request->isMethod('POST')) {
+              $logger = $this->get('logger');
+              $logger->info('HIHI');
 
-        $professions = $em->getRepository('ResumeBundle:Profession')->findAll();
+              $name = $request->request->get('form')['name'];
+              $usertype = $request->request->get('form')['usertype'];
+
+              $ut = $em->getRepository('ResumeBundle:Usertype')->findOneById($usertype);
+
+              $newprofession = new Profession();
+              $newprofession->setName($name);
+              $newprofession->setUsertype($ut);
+
+
+
+              $em = $this->getDoctrine()->getManager();
+              $em->persist($newprofession);
+              $em->flush();
+
+              $this->addFlash(
+                'notice',
+                'La información fue guardada con exito'
+              );
+
+              $this->setShowCollapse($ut->getId());
+
+              return $this->redirectToRoute('panel_profession_index');
+        }
+
+        //$professions = $em->getRepository('ResumeBundle:Profession')->findAll();
+        $usertypes = $em->getRepository('ResumeBundle:Usertype')->findAll();
+        $teachers = $em->getRepository('ResumeBundle:Profession')->findByUsertype(1);
+        $techtops = $em->getRepository('ResumeBundle:Profession')->findByUsertype(2);
+        $techmids = $em->getRepository('ResumeBundle:Profession')->findByUsertype(3);
+        $professionals = $em->getRepository('ResumeBundle:Profession')->findByUsertype(5);
+
+        $profession = new Profession();
+        $form = $this->createFormBuilder($profession)
+        ->setAction($this->generateUrl('panel_profession_index'))
+        ->setMethod('POST')
+        ->add('name',TextType::class,array('label' => 'Nombre de Título o Profesión',
+              'attr' => array('class' => 'form-control')
+            ))
+        ->add('usertype',EntityType::class,array('label' => 'Título',
+             'required' => false,
+             'placeholder' => 'Selecciona una opción',
+             'attr' => array('class' => 'form-control'),
+             'class' => 'ResumeBundle:Usertype'))
+        ->getForm();
 
         return $this->render('profession/index.html.twig', array(
-            'professions' => $professions,
+            'teachers' => $teachers,
+            'techtops' => $techtops,
+            'techmids' => $techmids,
+            'professionals' => $professionals,
+            'usertype' => $usertypes,
+            'form' => $form->createView(),
         ));
     }
 
@@ -121,6 +176,55 @@ class ProfessionController extends Controller
     /**
      * Deletes a Profession entity.
      *
+     * @Route("/delete/{id}", name="panel_profession_delete_one")
+     * @Method("GET")
+     */
+    public function deleteOneAction($id)
+    {
+
+      $user = $this->getUser();
+      $this->validationAccessForUser($user);
+
+      $em = $this->getDoctrine()->getManager();
+      $prof = $em->getRepository('ResumeBundle:Profession')->findOneById($id);
+      $ut = $prof->getUsertype();
+
+      $this->setShowCollapse($ut->getId());
+
+      $em->remove($prof);
+      $em->flush();
+
+      $this->addFlash(
+        'notice',
+        'La información fue eliminada con exito'
+      );
+      return $this->redirectToRoute('panel_profession_index');
+    }
+
+    private function setShowCollapse($idusertype)
+    {
+      if ( $idusertype == 1 ){
+          $show = 'teacher';
+      }
+      if ( $idusertype == 2 ){
+          $show = 'techtop';
+      }
+      if ( $idusertype == 3 ){
+          $show = 'techmid';
+      }
+      if ( $idusertype == 5 ){
+          $show = 'professional';
+      }
+      $this->addFlash(
+        'show',
+        $show
+      );
+    }
+
+
+    /**
+     * Deletes a Profession entity.
+     *
      * @Route("/{id}", name="panel_profession_delete")
      * @Method("DELETE")
      */
@@ -152,5 +256,13 @@ class ProfessionController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+
+
+    private function validationAccessForUser($user){
+        if (!is_object($user)) {
+          return $this->render('ResumeBundle:Default:index.html.twig');
+        }
     }
 }

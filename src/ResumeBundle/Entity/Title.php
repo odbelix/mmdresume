@@ -50,9 +50,9 @@ class Title
     private $userid;
 
     /**
-    * @ORM\OneToMany(targetEntity="History", mappedBy="title")
+    * @ORM\OneToMany(targetEntity="Experience", mappedBy="title")
     */
-    private $histories;
+    private $experiences;
 
 
     /**
@@ -204,5 +204,39 @@ class Title
     public function getHistories()
     {
         return $this->histories;
+    }
+
+    /**
+     * Add experience
+     *
+     * @param \ResumeBundle\Entity\Experience $experience
+     *
+     * @return Title
+     */
+    public function addExperience(\ResumeBundle\Entity\Experience $experience)
+    {
+        $this->experiences[] = $experience;
+
+        return $this;
+    }
+
+    /**
+     * Remove experience
+     *
+     * @param \ResumeBundle\Entity\Experience $experience
+     */
+    public function removeExperience(\ResumeBundle\Entity\Experience $experience)
+    {
+        $this->experiences->removeElement($experience);
+    }
+
+    /**
+     * Get experiences
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getExperiences()
+    {
+        return $this->experiences;
     }
 }

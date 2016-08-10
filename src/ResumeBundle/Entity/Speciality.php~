@@ -71,4 +71,49 @@ class Speciality
     {
         return $this->name;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->jobs = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add job
+     *
+     * @param \ResumeBundle\Entity\Job $job
+     *
+     * @return Speciality
+     */
+    public function addJob(\ResumeBundle\Entity\Job $job)
+    {
+        $this->jobs[] = $job;
+
+        return $this;
+    }
+
+    /**
+     * Remove job
+     *
+     * @param \ResumeBundle\Entity\Job $job
+     */
+    public function removeJob(\ResumeBundle\Entity\Job $job)
+    {
+        $this->jobs->removeElement($job);
+    }
+
+    /**
+     * Get jobs
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getJobs()
+    {
+        return $this->jobs;
+    }
+    
+    public function __toString() {
+      return $this->name;
+    }
 }
