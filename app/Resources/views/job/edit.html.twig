@@ -20,6 +20,33 @@
       <div class="panel panel-default">
         <div class="panel-heading">Editando Información del Trabajo</div>
         <div class="panel-body">
+
+        {% for flash_message in app.session.flashBag.get('notice') %}
+        <div class="row">
+            <div class="col-lg-12">
+            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                {{ flash_message }}
+                            </div>
+
+            </div>
+        </div>
+        {% endfor %}
+
+
+        {% for flash_message in app.session.flashBag.get('error') %}
+        <div class="row">
+            <div class="col-lg-12">
+            <div class="alert alert-danger alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                {{ flash_message }}
+                            </div>
+
+            </div>
+        </div>
+        {% endfor %}
+
+
         <div class="row">
           <div class="col-lg-6">
           {{ form_start(edit_form,{'attr': { 'role': 'form' } }) }}
@@ -49,11 +76,15 @@
           <p class="text-danger">{{ form_errors(edit_form.hours) }}</p>
 	{{ form_widget(edit_form.hours,{ 'attr': {'class': 'form-control'}}) }}
           </div>
+          {% if edit_form.profession.vars.value is not empty %}
           <div class="form-group">
             <label>Especialidad</label>
-          <p class="text-danger">{{ form_errors(edit_form.speciality) }}</p>
-	{{ form_widget(edit_form.speciality,{ 'attr': {'class': 'form-control'}}) }}
+          <p class="text-danger">{{ form_errors(edit_form.profession) }}</p>
+	{{ form_widget(edit_form.profession,{ 'attr': {'class': 'form-control'}}) }}
           </div>
+          {% else %}
+            {{ form_widget(edit_form.profession, {'attr': {'class': 'hide'},'disabled':'disabled','hidden':'hidden' }) }}
+          {% endif %}
 
           <div class="form-group">
             <label>Establecimiento</label>

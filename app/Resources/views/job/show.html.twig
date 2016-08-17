@@ -12,6 +12,32 @@
       <div class="panel panel-default">
         <div class="panel-heading">Información del Trabajo</div>
         <div class="panel-body">
+
+        {% for flash_message in app.session.flashBag.get('notice') %}
+        <div class="row">
+            <div class="col-lg-12">
+            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                {{ flash_message }}
+                            </div>
+
+            </div>
+        </div>
+        {% endfor %}
+
+
+        {% for flash_message in app.session.flashBag.get('error') %}
+        <div class="row">
+            <div class="col-lg-12">
+            <div class="alert alert-danger alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                {{ flash_message }}
+                            </div>
+
+            </div>
+        </div>
+        {% endfor %}
+
         <div class="row">
           <div class="col-lg-6">
 
@@ -22,13 +48,37 @@
           <th><h4>{{ job.name }}</h4></th>
           </tr>
           <tr>
-            <th colspan="2">
+            <th>
             {{ form_start(delete_form) }}
             <input class="btn btn-danger" type="submit" value="Eliminar">
             {{ form_end(delete_form) }}
             </th>
+            <th>
+            {% if job.assigments|length == 0 %}
+              <a href="{{path('panel_job_assigment', { 'id': job.id }) }}" class="btn btn-success" >Asignar Trabajo</a>
+            {% else %}
+              {% for asig in job.assigments %}
+                <a href="{{path('panel_assigment_show', { 'id': asig.id }) }}" class="btn btn-info" >Ver Asignación</a>
+              {% endfor %}
+            {% endif %}
+            </th>
           </tr>
 
+          {% if job.profession is not null %}
+          <tr>
+          <th>Tipo de Postulante</th>
+          <td>{{ job.profession.usertype }}</td>
+          </tr>
+            <tr>
+            <th>Título/Profesión</th>
+            <td>{{ job.profession }}</td>
+            </tr>
+          {% else %}
+            <tr>
+              <th>Tipo de Postulante</th>
+              <td>Enseñanza media Completa</td>
+            </tr>
+          {% endif %}
           <tr>
           <th>Detalle/Descripción</th>
           <td>{{ job.detail }}</td>
@@ -43,11 +93,11 @@
           </tr>
           <tr>
           <th>Horas semanales</th>
-          <td>{{ job.hours }}</td>
+          <td>{{ job.hours }} Hrs</td>
           </tr>
           <tr>
           <th>Periodo de Trabajo</th>
-          <td>{{ days }}</td>
+          <td>{{ days }} Días</td>
           </tr>
           <tr>
           <th colspan="2">

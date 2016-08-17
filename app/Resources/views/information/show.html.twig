@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Information</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ information.id }}</td>
+            </tr>
+            <tr>
+                <th>Shortname</th>
+                <td>{{ information.shortname }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ information.title }}</td>
+            </tr>
+            <tr>
+                <th>Message</th>
+                <td>{{ information.message }}</td>
+            </tr>
+            <tr>
+                <th>Responsable</th>
+                <td>{{ information.responsable }}</td>
+            </tr>
+            <tr>
+                <th>Signature</th>
+                <td>{{ information.signature }}</td>
+            </tr>
+            <tr>
+                <th>Version</th>
+                <td>{{ information.version }}</td>
+            </tr>
+            <tr>
+                <th>Creationdate</th>
+                <td>{% if information.creationdate %}{{ information.creationdate|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Lastmodification</th>
+                <td>{% if information.lastmodification %}{{ information.lastmodification|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('panel_information_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('panel_information_edit', { 'id': information.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

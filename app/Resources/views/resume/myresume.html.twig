@@ -36,7 +36,6 @@
     <div class="col-lg-12">
       <h3 class="page-header">Información Personal</h3>
       <div class="text-right">
-        <a href="{{path('resume_resume_exportpdf')}}" class="btn btn-success"><span class="fa fa-file-pdf-o"></span> Exportar</a>
         <a href="{{path('resume_profile_show')}}" class="btn btn-info">Ver perfil</a>
       </div>
       <div class="caption-full">
@@ -78,6 +77,8 @@
       <!-- TABLEEND -->
     </div>
 </div>
+
+
 
 <div class="row">
     <div class="col-lg-12">
@@ -157,13 +158,18 @@
       </div>
     </div>
 </div>
+
 <div class="row">
     <div class="col-lg-12">
       <h3 class="page-header">Experiencia</h3>
       <div class="text-right">
-        <button class="btn btn-success" data-toggle="modal" data-target="#ModalExp">
-          Agregar
-        </button>
+        {% set expclass = '' %}
+        {% set targetex = '#ModalExp' %}
+        {% if titles|length < 1 %}
+          {% set expclass = 'disabled' %}
+          {% set targetex = '' %}
+        {% endif %}
+        <button class="btn btn-success {{expclass}}" data-toggle="modal" data-target="{{targetex}}">Agregar</button>
       </div>
       <!-- MODAL FOR NEW EXP-->
       <div class="modal fade" id="ModalExp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">

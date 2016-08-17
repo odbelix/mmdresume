@@ -12,9 +12,68 @@
   <div class="col-lg-12">
       <div class="panel panel-default">
         <div class="panel-heading">Lista de <b>Establecimientos</b> creados en la Plataforma
-        <a class="btn btn-default" href="{{ path('panel_workplace_new') }}">Nuevo</a>
+
         </div>
         <div class="panel-body">
+
+        {% for flash_message in app.session.flashBag.get('notice') %}
+        <div class="row">
+            <div class="col-lg-12">
+            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                {{ flash_message }}
+                            </div>
+
+            </div>
+        </div>
+        {% endfor %}
+
+        {% for flash_message in app.session.flashBag.get('error') %}
+        <div class="row">
+            <div class="col-lg-12">
+            <div class="alert alert-danger alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                {{ flash_message }}
+                            </div>
+
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="text-right">
+          <button class="btn btn-primary" data-toggle="modal" data-target="#myModalNewWorkplace">
+            Nuevo Establecimiento
+          </button>
+        </div>
+        <hr>
+
+        <!-- MODAL NEW workplace -->
+        <div class="modal fade" id="myModalNewWorkplace" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                     <div class="modal-header">
+                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                   <h4 class="modal-title" id="myModalLabel">Nuevo Establecimiento</h4>
+                      </div>
+                      {{ form_start(form) }}
+                      <div class="modal-body">
+                               <!-- FORM FOR NEW PROFESSION -->
+                               {{ form_widget(form) }}
+                               <!-- FORM FOR NEW PROFESSION -->
+                       </div>
+                       <div class="modal-footer">
+                           <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                           <button type="submit" class="btn btn-primary">Crear</button>
+                        </div>
+                        {{ form_end(form) }}
+                   </div>
+                   <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+        <!-- MODAL NEW WORKPLACE -->
+
     {% include "ResumeBundle:Utils:search-table-searchbar.html.twig" %}
           <table class="table table-bordered results">
               <thead>
@@ -32,17 +91,17 @@
               {% for workplace in workplaces %}
                   <tr>
                       <td><a href="{{ path('panel_workplace_show', { 'id': workplace.id }) }}">{{ count }}</a></td>
-                      <td>{{ workplace.name }}</td>
+                      <td>{{ workplace.name }} <br>
+                      <b>Director:{{workplace.responsable}}</b>
+                      </td>
                       <td>{{ workplace.address }}</td>
                       <td>
                         <a class="btn btn-default" href="{{ path('panel_workplace_edit', { 'id': workplace.id }) }}">Editar</a>
+                        <a class="btn btn-danger" href="{{ path('panel_workplace_delete_one', { 'id': workplace.id }) }}">Eliminar</a>
                       </td>
                   </tr>
-                   {% set count = count + 1 %}  
+                   {% set count = count + 1 %}
               {% endfor %}
-              <tr>
-                <td colspan="4"><a class="btn btn-default" href="{{ path('panel_workplace_new') }}">Agregar nuevo Lugar</a></td>
-              </tr>
               </tbody>
           </table>
     </div>

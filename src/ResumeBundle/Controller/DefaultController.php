@@ -5,6 +5,7 @@ namespace ResumeBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use ResumeBundle\Entity\User;
+use ResumeBundle\Entity\Information;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class DefaultController extends Controller
@@ -54,7 +55,7 @@ class DefaultController extends Controller
             $teachername = $ut->getName();
             $teachernameid = $ut->getId();
         }
-        if ( strpos($ut->getName(),"uperoir") !== false ){
+        if ( strpos($ut->getName(),"uperior") !== false ){
             $assistanttopname = $ut->getName();
             $assistanttopnameid = $ut->getId();
         }
@@ -62,7 +63,7 @@ class DefaultController extends Controller
             $assistantmidname = $ut->getName();
             $assistantmidnameid = $ut->getId();
         }
-        if ( strpos($ut->getName(),"ense") !== false ){
+        if ( strpos($ut->getName(),"media") !== false ){
             $assistant = $ut->getName();
             $assistantid = $ut->getId();
         }
@@ -89,19 +90,19 @@ class DefaultController extends Controller
       else {
         # code...
         $userManipulator->addRole($username,"ROLE_ASSISTANT");
-        if($type == 2) {
+        if( $type == 2 ) {
             $userdb->setUsertype($assistanttopname);
             $userdb->setUsertypeid($assistanttopnameid);
         }
-        if($type == 3) {
+        if( $type == 3 ) {
             $userdb->setUsertype($assistantmidname);
             $userdb->setUsertypeid($assistantmidnameid);
         }
-        if($type == 4) {
+        if( $type == 4 ) {
             $userdb->setUsertype($assistant);
             $userdb->setUsertypeid($assistantid);
         }
-        if($type == 5) {
+        if( $type == 5 ) {
             //$userdb->setUsertype(￼$professional);
             //$userdb->setUsertypeid(￼$professionalid);
             $userdb->setUsertype($professional);
@@ -151,12 +152,16 @@ class DefaultController extends Controller
     public function panelPostulantAction()
     {
 
+      $em = $this->getDoctrine()->getManager();
+      $message = $em->getRepository('ResumeBundle:Information')->findOneByShortname("welcome_text");
+
       $user = $this->getUser();
       if (!is_object($user)) {
           return $this->render('ResumeBundle:Default:index.html.twig');
       }
       return $this->render('ResumeBundle:Default:panel-postulant.html.twig', array(
         'user' => $user,
+        'message' => $message,
         'menu' => ''
       ));
     }

@@ -56,6 +56,24 @@ class Title
 
 
     /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="titles")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+     private $user;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Profession", inversedBy="professions")
+     * @ORM\JoinColumn(name="profession_id", referencedColumnName="id")
+     */
+     private $profession;
+
+
+
+
+
+
+    /**
      * Get id
      *
      * @return int
@@ -238,5 +256,87 @@ class Title
     public function getExperiences()
     {
         return $this->experiences;
+    }
+
+    /**
+     * Add profession
+     *
+     * @param \ResumeBundle\Entity\Profession $profession
+     *
+     * @return Title
+     */
+    public function addProfession(\ResumeBundle\Entity\Profession $profession)
+    {
+        $this->professions[] = $profession;
+
+        return $this;
+    }
+
+    /**
+     * Remove profession
+     *
+     * @param \ResumeBundle\Entity\Profession $profession
+     */
+    public function removeProfession(\ResumeBundle\Entity\Profession $profession)
+    {
+        $this->professions->removeElement($profession);
+    }
+
+    /**
+     * Get professions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProfessions()
+    {
+        return $this->professions;
+    }
+
+    /**
+     * Set profession
+     *
+     * @param \ResumeBundle\Entity\Profession $profession
+     *
+     * @return Title
+     */
+    public function setProfession(\ResumeBundle\Entity\Profession $profession = null)
+    {
+        $this->profession = $profession;
+
+        return $this;
+    }
+
+    /**
+     * Get profession
+     *
+     * @return \ResumeBundle\Entity\Profession
+     */
+    public function getProfession()
+    {
+        return $this->profession;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \ResumeBundle\Entity\User $user
+     *
+     * @return Title
+     */
+    public function setUser(\ResumeBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \ResumeBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

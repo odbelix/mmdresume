@@ -9,6 +9,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use ResumeBundle\Entity\Job;
 use ResumeBundle\Entity\Usertype;
 use ResumeBundle\Form\JobType;
+use ResumeBundle\Form\TeacherType;
+use ResumeBundle\Form\TechtopType;
+use ResumeBundle\Form\TechmidType;
+use ResumeBundle\Form\SchoolType;
+use ResumeBundle\Form\ProfessionalType;
 use ResumeBundle\Controller\InfotextController;
 
 /**
@@ -29,10 +34,62 @@ class JobController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         if ($request->isMethod('POST')) {
-          $this->addFlash(
-            'notice',
-            'La información fue guardada con exito'
-          );
+          //
+
+          $formname = $request->request->keys()[0];
+
+          $name = $request->request->get($formname)['name'];
+          $detail = $request->request->get($formname)['detail'];
+          $startjob = $request->request->get($formname)['startjob'];
+          $endjob = $request->request->get($formname)['endjob'];
+
+
+          if(array_key_exists('profession',$request->request->get($formname))){
+              $profession = $request->request->get($formname)['profession'];
+              $professionEntity = $em->getRepository('ResumeBundle:Profession')->findOneById($profession);
+          }
+          else {
+              $professionEntity = null;
+          }
+          $hours = $request->request->get($formname)['hours'];
+          $workplace = $request->request->get($formname)['workplace'];
+
+          $wp = $em->getRepository('ResumeBundle:Workplace')->findOneById($workplace);
+          if ( $wp ) {
+            $newJob = new Job();
+            $newJob->setName($name);
+            $newJob->setDetail($detail);
+            $newJob->setStartjob(new \Datetime($startjob));
+            $newJob->setEndjob(new \Datetime($endjob));
+            $newJob->setProfession($professionEntity);
+            $newJob->setHours($hours);
+            $newJob->setWorkplace($wp);
+
+            //FOR THE CREATION
+            $newJob->setUsername($this->getUser());
+            $newJob->setLastusername($this->getUser());
+            $newJob->setCreated(new \DateTime('now'));
+            $newJob->setLastupdate(new \DateTime('now'));
+            $newJob->setVersion(1);
+
+
+
+            $em->persist($newJob);
+            $em->flush();
+
+            $this->addFlash(
+              'notice',
+              'La información fue guardada con exito'
+            );
+          }
+          else {
+            $this->addFlash(
+              'error',
+              'Se debe selecionar un Establecimiento como Lugar de Trabajo'
+            );
+          }
+
+
           return $this->redirectToRoute('panel_job_index');
         }
 
@@ -41,12 +98,21 @@ class JobController extends Controller
         $usertypes = $em->getRepository('ResumeBundle:Usertype')->findAll();
 
         $job = new Job();
-        $form = $this->createForm('ResumeBundle\Form\JobType', $job);
+        $formteacher = $this->createForm('ResumeBundle\Form\TeacherType', $job);
+        $formtechtop = $this->createForm('ResumeBundle\Form\TechtopType', $job);
+        $formtechmid = $this->createForm('ResumeBundle\Form\TechmidType', $job);
+        $formschool = $this->createForm('ResumeBundle\Form\SchoolType', $job);
+        $formprofessional = $this->createForm('ResumeBundle\Form\ProfessionalType', $job);
+
 
 
         return $this->render('job/index.html.twig', array(
             'jobs' => $jobs,
-            'form' => $form->createView(),
+            'formteacher' => $formteacher->createView(),
+            'formtechtop' => $formtechtop->createView(),
+            'formtechmid' => $formtechmid->createView(),
+            'formschool' => $formschool->createView(),
+            'formprofessional' => $formprofessional->createView(),
             'usertypes' => $usertypes,
         ));
     }
@@ -110,6 +176,31 @@ class JobController extends Controller
         ));
     }
 
+
+    /**
+     * Finds and displays a Job entity.
+     *
+     * @Route("/assigment/{id}", name="panel_job_assigment")
+     * @Method("GET")
+     */
+    public function jobAssigmentAction(Job $job)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $deleteForm = $this->createDeleteForm($job);
+
+        $profession = $job->getProfession();
+        $postulants = $em->getRepository('ResumeBundle:User')->findByUsertypeid($profession->getUsertype());
+
+        $days = $job->getTotalDays();
+        return $this->render('job/jobassigment.html.twig', array(
+            'job' => $job,
+            'postulants' => $postulants,
+            'days' => $days,
+        ));
+    }
+
+
+
     /**
      * Displays a form to edit an existing Job entity.
      *
@@ -132,13 +223,20 @@ class JobController extends Controller
             $em->persist($job);
             $em->flush();
 
+            $this->addFlash(
+                  'notice',
+                  'La información fue editada con exito'
+            );
+
+
             return $this->redirectToRoute('panel_job_show', array('id' => $job->getId()));
-            //return $this->redirectToRoute('panel_job_edit', array('id' => $job->getId()));
+
+
+
         }
 
         return $this->render('job/edit.html.twig', array(
             'job' => $job,
-            'menu' => $this->getMyMenu(),
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
@@ -160,7 +258,10 @@ class JobController extends Controller
             $em->remove($job);
             $em->flush();
         }
-
+        $this->addFlash(
+              'notice',
+              'La información fue eliminada con exito'
+        );
         return $this->redirectToRoute('panel_job_index');
     }
 

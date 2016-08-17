@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use ResumeBundle\Entity\Workplace;
 use ResumeBundle\Form\WorkplaceType;
 use ResumeBundle\Controller\InfotextController;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 /**
  * Workplace controller.
@@ -22,16 +23,39 @@ class WorkplaceController extends Controller
      * Lists all Workplace entities.
      *
      * @Route("/", name="panel_workplace_index")
-     * @Method("GET")
+     * @Method({"GET","POST"})
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        if ($request->isMethod('POST')) {
+
+          $name = $request->request->get('workplace')['name'];
+          $address = $request->request->get('workplace')['address'];
+          $responsable = $request->request->get('workplace')['responsable'];
+
+          $wp = new Workplace();
+          $wp->setName($name);
+          $wp->setAddress($address);
+          $wp->setResponsable($responsable);
+
+          $em->persist($wp);
+          $em->flush();
+          $this->addFlash(
+            'notice',
+            'La información fue guardada con exito'
+          );
+
+        }
 
         $workplaces = $em->getRepository('ResumeBundle:Workplace')->findAll();
 
+        $workplace = new Workplace();
+        $form = $this->createForm('ResumeBundle\Form\WorkplaceType', $workplace);
+
         return $this->render('workplace/index.html.twig', array(
             'workplaces' => $workplaces,
+            'form' => $form->createView(),
             'menu' => $this->getMyMenu(),
         ));
     }
@@ -69,6 +93,42 @@ class WorkplaceController extends Controller
             'form' => $form->createView(),
         ));
     }
+
+    /**
+     * Deletes a Profession entity.
+     *
+     * @Route("/delete/{id}", name="panel_workplace_delete_one")
+     * @Method("GET")
+     */
+    public function deleteOneAction($id)
+    {
+
+      $user = $this->getUser();
+      $em = $this->getDoctrine()->getManager();
+      $wp = $em->getRepository('ResumeBundle:Workplace')->findOneById($id);
+
+      try {
+        $em->remove($wp);
+        $em->flush();
+        $this->addFlash(
+          'notice',
+          'La información fue eliminada con exito'
+        );
+      }
+      catch(ForeignKeyConstraintViolationException $e){
+
+        $this->addFlash(
+          'error',
+          'No se puede eliminar el Establecimiento ['.$wp->getName().']. Este tiene un Trabajo o Experiencia Laboral'
+        );
+      }
+
+      return $this->redirectToRoute('panel_workplace_index');
+
+    }
+
+
+
 
     /**
      * Finds and displays a Workplace entity.
@@ -127,9 +187,24 @@ class WorkplaceController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            try {
+
             $em = $this->getDoctrine()->getManager();
             $em->remove($workplace);
             $em->flush();
+            $this->addFlash(
+              'notice',
+              'La información fue eliminada con Exito'
+            );
+
+            }
+            catch(ForeignKeyConstraintViolationException $e){
+              $this->addFlash(
+                'error',
+                'No se puede eliminar el Establecimiento ['.$workplace->getName().']. Este tiene un Trabajo o Experiencia Laboral relacionado'
+              );
+            }
         }
 
         return $this->redirectToRoute('panel_workplace_index');

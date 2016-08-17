@@ -7,12 +7,22 @@
     <!-- /.col-lg-12 -->
 </div>
 <div class="row">
-    <div class="col-lg-6">
+    <div class="col-lg-12">
               <div class="panel panel-default">
                         <div class="panel-heading">
-                            Editanto Establecimiento
+                            Edición de Establecimiento
                         </div>
                         <div class="panel-body">
+
+                        <div class="row">
+                            <div class="col-lg-6">
+                                      <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    Edición
+                                                </div>
+                                                <div class="panel-body">
+
+
                         {{ form_start(edit_form) }}
                         <div class="form-group">
                           <label>Nombre</label>
@@ -39,23 +49,15 @@
                         {{ form_start(delete_form) }}
                           <input class="btn btn-danger" type="submit" value="Eliminar">
                         {{ form_end(delete_form) }}
+
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+
+
                         </div>
               </div>
-    </div>
-    <div class="col-lg-6">
-      {% if infotext is defined %}
-      <div class="panel panel-info">
-                <div class="panel-heading">
-                    Información
-                </div>
-                <div class="panel-body">
-                    <p>{{infotext}}</p>
-                </div>
-                <div class="panel-footer">
-                    <a class="btn btn-default" href="{{ path('panel_workplace_index') }}">Volver</a>
-                </div>
-      </div>
-      {% endif %}
     </div>
 </div>
 {% endblock %}

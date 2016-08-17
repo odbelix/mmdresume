@@ -1,0 +1,83 @@
+<?php
+
+namespace ResumeBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Information
+ *
+ * @ORM\Table(name="information")
+ * @ORM\Entity(repositoryClass="ResumeBundle\Repository\InformationRepository")
+ */
+class Information
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="shortname", type="string", length=50, nullable=true, unique=true)
+     */
+    private $shortname;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=200, nullable=true, unique=true)
+     */
+    private $title;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="message", type="text")
+     */
+    private $message;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="responsable", type="string", length=200, nullable=true, unique=true)
+     */
+    private $responsable;
+
+    /**
+     * @var string
+     *
+     * * @ORM\Column(name="signature", type="string", length=500, nullable=true, unique=true)
+     */
+    private $signature;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="version", type="integer")
+     */
+    private $version;
+
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="creationdate", type="date")
+     */
+    private $creationdate;
+
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="lastmodification", type="date")
+     */
+    private $lastmodification;
+
+
+}

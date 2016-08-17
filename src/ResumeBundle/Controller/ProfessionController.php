@@ -12,6 +12,8 @@ use ResumeBundle\Form\ProfessionType;
 use ResumeBundle\Controller\InfotextController;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+
 
 /**
  * Profession controller.
@@ -37,24 +39,31 @@ class ProfessionController extends Controller
               $usertype = $request->request->get('form')['usertype'];
 
               $ut = $em->getRepository('ResumeBundle:Usertype')->findOneById($usertype);
+              if($ut){
+                $newprofession = new Profession();
+                $newprofession->setName($name);
+                $newprofession->setUsertype($ut);
 
-              $newprofession = new Profession();
-              $newprofession->setName($name);
-              $newprofession->setUsertype($ut);
 
 
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($newprofession);
+                $em->flush();
 
-              $em = $this->getDoctrine()->getManager();
-              $em->persist($newprofession);
-              $em->flush();
+                $this->addFlash(
+                  'notice',
+                  'La información fue guardada con exito'
+                );
+                $this->setShowCollapse($ut->getId());
+              }
+              else {
+                $this->addFlash(
+                  'error',
+                  'Se debe seleccionar un tipo de Postulante'
+                );
 
-              $this->addFlash(
-                'notice',
-                'La información fue guardada con exito'
-              );
 
-              $this->setShowCollapse($ut->getId());
-
+              }
               return $this->redirectToRoute('panel_profession_index');
         }
 
@@ -72,7 +81,7 @@ class ProfessionController extends Controller
         ->add('name',TextType::class,array('label' => 'Nombre de Título o Profesión',
               'attr' => array('class' => 'form-control')
             ))
-        ->add('usertype',EntityType::class,array('label' => 'Título',
+        ->add('usertype',EntityType::class,array('label' => 'Tipo de Postulante',
              'required' => false,
              'placeholder' => 'Selecciona una opción',
              'attr' => array('class' => 'form-control'),
@@ -162,7 +171,7 @@ class ProfessionController extends Controller
             $em->persist($profession);
             $em->flush();
 
-            return $this->redirectToRoute('panel_profession_edit', array('id' => $profession->getId()));
+            return $this->redirectToRoute('panel_profession_show', array('id' => $profession->getId()));
         }
 
         return $this->render('profession/edit.html.twig', array(
@@ -191,13 +200,22 @@ class ProfessionController extends Controller
 
       $this->setShowCollapse($ut->getId());
 
-      $em->remove($prof);
-      $em->flush();
+      try {
+        $em->remove($prof);
+        $em->flush();
+        $this->addFlash(
+          'notice',
+          'La información fue eliminada con exito'
+        );
+      }
+      catch(ForeignKeyConstraintViolationException $e){
 
-      $this->addFlash(
-        'notice',
-        'La información fue eliminada con exito'
-      );
+        $this->addFlash(
+          'error',
+          'No se puede eliminar el título/profesión ['.$prof->getName().']. Este tiene un Trabajo o Título relacionado '
+        );
+      }
+
       return $this->redirectToRoute('panel_profession_index');
     }
 

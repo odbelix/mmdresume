@@ -37,17 +37,6 @@
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="#">Sobre DAEM</a>
-                    </li>
-                    <li>
-                        <a href="#">Tu CV Aquí</a>
-                    </li>
-                    <li>
-                        <a href="#">Contactanos</a>
-                    </li>
-                </ul>
             </div>
             <!-- /.navbar-collapse -->
         </div>
@@ -61,7 +50,7 @@
                 {% set PATH = app.request.attributes.get('_route') %}
                 {% set profileclass = "" %}
                 {% set resumeclass = "" %}
-                {% set assignmentclass = "" %}
+                {% set contactlass = "" %}
 
                 {% if PATH == 'resume_profile_show' or PATH == 'resume_profile_edit' or PATH == 'resume_profile_cancel' %}
                     {% set profileclass = "active" %}
@@ -70,17 +59,17 @@
                     {% set resumeclass = "active" %}
                 {% endif %}
                 {% if PATH == '' %}
-                    {% set assignmentclass = "active" %}
+                    {% set contactlass = "active" %}
                 {% endif %}
 
                 <div class="list-group">
                     <a href="{{path('resume_profile_show')}}" class="list-group-item disable {{profileclass}}">Perfil</a>
                     {% if is_granted('ROLE_TEACHER') %}
-                      <a href="{{path('resume_resume_teacher')}}" class="list-group-item {{resumeclass}}">Mi CV</a>
+                      <a href="{{path('resume_resume_teacher')}}" class="list-group-item {{resumeclass}}">Mi Curriculum Vitae</a>
                     {% else %}
-                      <a href="{{path('resume_resume_index')}}" class="list-group-item {{resumeclass}}">Mi CV</a>
+                      <a href="{{path('resume_resume_index')}}" class="list-group-item {{resumeclass}}">Mi Curriculum Vitae</a>
                     {% endif %}
-                    <a href="#" class="list-group-item {{assignmentclass}}">Asignaciones</a>
+                      <a href="#" class="list-group-item {{contactlass}}">Contactanos</a>
                     <a href="{{path('fos_user_security_logout')}}" class="list-group-item">
                     <span class="btn btn-danger">Salir</span>
                     </a>
@@ -114,6 +103,21 @@
                     {% endif %}
                 </div>
                {% endif %}
+
+               {% if PATH == 'resume_default_panelpostulant' %}
+                  {% if message is defined %}
+                  <div class="well">
+                    <h4>{{message.title}}</h4>
+                    <p>{{message.message}}</p>
+                    <hr>
+                      <div class="text-right">
+                      <b>{{message.responsable}}</b><br>
+                      {{message.signature}}
+                    </div>
+                  </div>
+                  {% endif %}
+               {% endif %}
+
 
 
                {% block maincontent %}

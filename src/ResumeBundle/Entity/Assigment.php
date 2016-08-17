@@ -3,6 +3,7 @@
 namespace ResumeBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * Assigment
@@ -57,13 +58,11 @@ class Assigment
     private $responsable;
 
 
-
     /**
      * @ORM\ManyToOne(targetEntity="Job", inversedBy="assigments")
      * @ORM\JoinColumn(name="job_id", referencedColumnName="id")
      */
      private $job;
-
 
      /**
       * @ORM\ManyToOne(targetEntity="User", inversedBy="assigments")
@@ -249,4 +248,10 @@ class Assigment
     {
         return $this->user;
     }
+
+
+    public function __toString() {
+        return $this->name;
+    }
+
 }

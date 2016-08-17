@@ -1,0 +1,55 @@
+{% extends "ResumeBundle:Default:panel-backend.html.twig" %}
+{% block maincontent %}
+{{ include ('assigment/title.html.twig') }}
+
+
+<!-- /.row -->
+<div class="row">
+  <div class="col-lg-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">Lista de <b>Asignaciones de Trabajos</b> gestionados en la plataforma</b>
+        </div>
+        <div class="panel-body">
+
+        <!-- TABLE -->
+    <table class="table table-striped results">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Trabajo</th>
+                <th>Tipo de Postulante</th>
+                <th>Asignado</th>
+                <th>Responsable</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for assigment in assigments %}
+            <tr>
+                <td><a href="{{ path('panel_assigment_show', { 'id': assigment.id }) }}">{{ assigment.id }}</a></td>
+                <td>{{assigment.job}}</td>
+                <td>{{assigment.job.profession.usertype}}</td>
+                <td>{% if assigment.dateassigment %}{{ assigment.dateassigment|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ assigment.responsable }}</td>
+                <td>
+                      <a class="btn btn-default" href="{{ path('panel_assigment_show', { 'id': assigment.id }) }}">Ver</a>
+                      <a class="btn btn-default" href="{{ path('panel_assigment_edit', { 'id': assigment.id }) }}">Editar</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <!-- TABLE -->
+
+
+
+        </div>
+      </div>
+  </div>
+</div>
+
+
+
+
+
+{% endblock %}

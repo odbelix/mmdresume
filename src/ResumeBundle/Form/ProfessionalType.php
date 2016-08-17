@@ -13,7 +13,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityRepository;
 
 
-class JobType extends AbstractType
+class ProfessionalType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -52,13 +52,13 @@ class JobType extends AbstractType
                   'attr' => array('class' => 'form-control','min' => '1','max' => '56','placeholder' => "Ingresar horas semanales")
                 ))
             //->add('username')
-            ->add('profession',EntityType::class, array('label' => 'Título/Profesión',
+            ->add('profession',EntityType::class, array('label' => 'Título Profesional',
                   'class' => 'ResumeBundle:Profession',
-                  'placeholder' => "Seleccionar un título o profesión",
+                  'placeholder' => "Selecciona título profesional",
                   'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('et')
                         ->where('et.usertype = :ut')
-                        ->setParameter('ut', 1)
+                        ->setParameter('ut', 5)
                         ->orderby('et.name','ASC');
                    },
                   'attr' => array('class' => 'form-control')

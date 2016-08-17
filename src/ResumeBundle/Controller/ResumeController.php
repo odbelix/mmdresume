@@ -52,6 +52,8 @@ class ResumeController extends Controller
         $titles = $em->getRepository('ResumeBundle:Title')->findBy(
         array('userid' => $user->getId()), array('obtaining' => 'DESC'));
 
+        //$titles = null;
+
         $experiences = $em->getRepository('ResumeBundle:History')->findBy(
         array('userid' => $user->getId()), array('startdate' => 'DESC'));
 
@@ -370,22 +372,28 @@ class ResumeController extends Controller
 
         if ($request->isMethod('POST')) {
 
+
           $title = $request->request->get('form')['title'];
           $obtaining = $request->request->get('form')['obtaining'];
           $other = $request->request->get('form')['other'];
 
           $newTitle = new Title();
+
           $title = $this->getTitleFromSelection($user->getUsertypeid(),$title);
           if($title){
               $newTitle->setName($title->getName());
               $newTitle->setIdtitle($title->getId());
+              $newTitle->setProfession($title);
+
           }
           else {
               $newTitle->setName($other);
               $newTitle->setIdtitle(0);
           }
+
           $newTitle->setObtaining($obtaining);
           $newTitle->setUserid($user->getId());
+          $newTitle->setUser($user);
 
           $em = $this->getDoctrine()->getManager();
           $em->persist($newTitle);
@@ -517,7 +525,7 @@ class ResumeController extends Controller
           $result = $em->getRepository('ResumeBundle:Speciality')->findOneById($idselected);
         }
         if ( $idusertype == 2 ){
-          $result = $em->getRepository('ResumeBundle:TechnicianTop')->findOneById($idselected);
+          $result = $em->getRepository('ResumeBundle:Profession')->findOneById($idselected);
         }
         if ( $idusertype == 3 ){
           $result = $em->getRepository('ResumeBundle:TechnicianMid')->findOneById($idselected);
@@ -541,7 +549,7 @@ class ResumeController extends Controller
           $classForm = 'ResumeBundle:Speciality';
       }
       if ( $idusertype == 2 ){
-          $classForm = 'ResumeBundle:TechnicianTop';
+          $classForm = 'ResumeBundle:Profession';
       }
       if ( $idusertype == 3 ){
           $classForm = 'ResumeBundle:TechnicianMid';
@@ -641,20 +649,22 @@ class ResumeController extends Controller
           $classForm = 'ResumeBundle:Speciality';
       }
       if ( $idusertype == 2 ){
-          $classForm = 'ResumeBundle:TechnicianTop';
+          $classForm = 'ResumeBundle:Profession';
       }
       if ( $idusertype == 3 ){
-          $classForm = 'ResumeBundle:TechnicianMid';
+          $classForm = 'ResumeBundle:Profession';
       }
       if ( $idusertype == 4 ){
 
       }
       //PROFESIONAL
       if ( $idusertype == 5 ){
-        $classForm = 'ResumeBundle:Title';
+        //$classForm = 'ResumeBundle:Title';
       }
       //FORM
 
+      $classForm = 'ResumeBundle:Profession';
+      
       $data = array();
       $form = $this->createFormBuilder($data)
          ->setAction($this->generateUrl('resume_resume_newexperience'))

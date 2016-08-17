@@ -108,6 +108,13 @@ class User extends BaseUser
     */
     private $experiences;
 
+
+    /**
+    * @ORM\OneToMany(targetEntity="Title", mappedBy="user")
+    */
+    private $titles;
+
+
     /**
      * Set firstname
      *
@@ -476,5 +483,73 @@ class User extends BaseUser
     public function getAssigments()
     {
         return $this->assigments;
+    }
+
+    /**
+     * Add experience
+     *
+     * @param \ResumeBundle\Entity\Experience $experience
+     *
+     * @return User
+     */
+    public function addExperience(\ResumeBundle\Entity\Experience $experience)
+    {
+        $this->experiences[] = $experience;
+
+        return $this;
+    }
+
+    /**
+     * Remove experience
+     *
+     * @param \ResumeBundle\Entity\Experience $experience
+     */
+    public function removeExperience(\ResumeBundle\Entity\Experience $experience)
+    {
+        $this->experiences->removeElement($experience);
+    }
+
+    /**
+     * Get experiences
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getExperiences()
+    {
+        return $this->experiences;
+    }
+
+    /**
+     * Add title
+     *
+     * @param \ResumeBundle\Entity\Title $title
+     *
+     * @return User
+     */
+    public function addTitle(\ResumeBundle\Entity\Title $title)
+    {
+        $this->titles[] = $title;
+
+        return $this;
+    }
+
+    /**
+     * Remove title
+     *
+     * @param \ResumeBundle\Entity\Title $title
+     */
+    public function removeTitle(\ResumeBundle\Entity\Title $title)
+    {
+        $this->titles->removeElement($title);
+    }
+
+    /**
+     * Get titles
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTitles()
+    {
+        return $this->titles;
     }
 }

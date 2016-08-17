@@ -35,6 +35,13 @@ class Profession
      private $usertype;
 
 
+      /**
+      * @ORM\OneToMany(targetEntity="Title", mappedBy="profession")
+      */
+      private $titles;
+
+
+
      /**
      * @ORM\OneToMany(targetEntity="Job", mappedBy="profession")
      */
@@ -142,5 +149,63 @@ class Profession
     public function getJobs()
     {
         return $this->jobs;
+    }
+
+    /**
+     * Set title
+     *
+     * @param \ResumeBundle\Entity\Title $title
+     *
+     * @return Profession
+     */
+    public function setTitle(\ResumeBundle\Entity\Title $title = null)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return \ResumeBundle\Entity\Title
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Add title
+     *
+     * @param \ResumeBundle\Entity\Title $title
+     *
+     * @return Profession
+     */
+    public function addTitle(\ResumeBundle\Entity\Title $title)
+    {
+        $this->titles[] = $title;
+
+        return $this;
+    }
+
+    /**
+     * Remove title
+     *
+     * @param \ResumeBundle\Entity\Title $title
+     */
+    public function removeTitle(\ResumeBundle\Entity\Title $title)
+    {
+        $this->titles->removeElement($title);
+    }
+
+    /**
+     * Get titles
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTitles()
+    {
+        return $this->titles;
     }
 }

@@ -5,6 +5,8 @@ namespace ResumeBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+
 
 class WorkplaceType extends AbstractType
 {
@@ -15,9 +17,16 @@ class WorkplaceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('address')
-            ->add('responsable')
+            ->add('name',TextType::class, array('label' => 'Nombre',
+                  'attr' => array('class' => 'form-control')
+                ))
+            ->add('address',TextType::class, array('label' => 'Dirección',
+                  'attr' => array('class' => 'form-control')
+                ))
+            ->add('responsable',TextType::class, array('label' => 'Director',
+                  'required' => false,
+                  'attr' => array('class' => 'form-control')
+                ))
         ;
     }
 

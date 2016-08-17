@@ -473,4 +473,10 @@ class Job
     {
         return $this->assigments;
     }
+
+
+    public function __toString() {
+        return $this->name;
+    }
+
 }
