@@ -40,6 +40,13 @@ class Workplace
     */
     private $jobs;
 
+
+    /**
+    * @ORM\OneToMany(targetEntity="TeacherDirector", mappedBy="workplace")
+    */
+    private $heads;
+
+
     /**
     * @ORM\OneToMany(targetEntity="Experience", mappedBy="workplace")
     */
@@ -246,5 +253,39 @@ class Workplace
     public function getExperiences()
     {
         return $this->experiences;
+    }
+
+    /**
+     * Add head
+     *
+     * @param \ResumeBundle\Entity\TeacherDirector $head
+     *
+     * @return Workplace
+     */
+    public function addHead(\ResumeBundle\Entity\TeacherDirector $head)
+    {
+        $this->heads[] = $head;
+
+        return $this;
+    }
+
+    /**
+     * Remove head
+     *
+     * @param \ResumeBundle\Entity\TeacherDirector $head
+     */
+    public function removeHead(\ResumeBundle\Entity\TeacherDirector $head)
+    {
+        $this->heads->removeElement($head);
+    }
+
+    /**
+     * Get heads
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getHeads()
+    {
+        return $this->heads;
     }
 }

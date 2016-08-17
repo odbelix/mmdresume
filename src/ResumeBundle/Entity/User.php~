@@ -116,6 +116,12 @@ class User extends BaseUser
 
 
     /**
+    * @ORM\OneToMany(targetEntity="TeacherDirector", mappedBy="user")
+    */
+    private $heads;
+
+
+    /**
      * Set firstname
      *
      * @param string $firstname

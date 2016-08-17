@@ -15,10 +15,14 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormFactory;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+
 
 use ResumeBundle\Entity\Workplace;
 use ResumeBundle\Entity\TeacherFile;
+use ResumeBundle\Entity\TeacherDirector;
 use ResumeBundle\Entity\User;
+use ResumeBundle\Entity\Experience;
 use ResumeBundle\Entity\Basic;
 use ResumeBundle\Entity\Speciality;
 use ResumeBundle\Entity\Title;
@@ -50,12 +54,12 @@ class ResumeController extends Controller
         $listtitle = $this->getListOfTitleAccordingTypeUser($user->getUsertypeid());
 
         $titles = $em->getRepository('ResumeBundle:Title')->findBy(
-        array('userid' => $user->getId()), array('obtaining' => 'DESC'));
+        array('user' => $user), array('obtaining' => 'DESC'));
 
         //$titles = null;
 
-        $experiences = $em->getRepository('ResumeBundle:History')->findBy(
-        array('userid' => $user->getId()), array('startdate' => 'DESC'));
+        $experiences = $em->getRepository('ResumeBundle:Experience')->findBy(
+        array('user' => $user), array('startdate' => 'DESC'));
 
         $message = null;
         $success = null;
@@ -79,6 +83,84 @@ class ResumeController extends Controller
           ));
 
     }
+
+    /**
+     * @Route("/assistant",name="resume_resume_school")
+     * @Method({"GET","POST"})
+     */
+    public function indexSchoolAssistantAction(Request $request){
+        $user = $this->getUser();
+        $this->validationAccessForUser($user);
+
+        $em = $this->getDoctrine()->getManager();
+        $workplaces = $em->getRepository('ResumeBundle:Workplace')->findAll();
+
+        $message = null;
+        $success = null;
+        if ($request->isMethod('POST')) {
+            $message = $request->request->get('message');
+            $success = $request->request->get('success');
+        }
+
+        $experiences = $em->getRepository('ResumeBundle:Experience')->findBy(
+        array('user' => $user), array('startdate' => 'DESC'));
+
+        $formexp = $this->createFormExpForSchoolAssistantType($workplaces);
+
+        return $this->render('resume/myresume-school.html.twig', array(
+            'user' => $user,
+            'message' => $message,
+            'success' => $success,
+            'exps' => $experiences,
+            'new_form_exp' => $formexp->createView(),
+          ));
+
+    }
+
+    /**
+     * @Route("/experience/new/school",name="resume_resume_newschoolexp")
+     * @Method({"POST"})
+     */
+    public function newSchoolExperienceAction(Request $request) {
+
+      $user = $this->getUser();
+      $this->validationAccessForUser($user);
+      $em = $this->getDoctrine()->getManager();
+
+      if ($request->isMethod('POST')) {
+        //GETTING INFORMATION FROM POST REQUEST FORM
+        $wpreq = $request->request->get('form')['workplace'];
+        $wp = $em->getRepository('ResumeBundle:Workplace')->findOneById($wpreq);
+
+        $detail = $request->request->get('form')['detail'];
+        $other = $request->request->get('form')['other'];
+        $startdate = $request->request->get('form')['startdate'];
+        $enddate = $request->request->get('form')['enddate'];
+
+        //INSERT TITLE
+        $newExp = new Experience();
+        $newExp->setUser($user);
+        $newExp->setDetail($detail);
+        $newExp->setWorkplace($wp);
+        $newExp->setOther($other);
+        $newExp->setStartdate(new \Datetime($startdate));
+        if ( strlen($enddate) != 0 )
+          $newExp->setEnddate(new \Datetime($enddate));
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($newExp);
+        $em->flush();
+
+        $this->addFlash(
+          'success',
+          'La información fue guardada con exito'
+        );
+
+      }
+
+      return $this->redirectToRoute('resume_resume_school');
+    }
+
     /**
      * @Route("/author/cat/{value}")
      * @Method({"GET"})
@@ -164,8 +246,9 @@ class ResumeController extends Controller
         $this->validationAccessForUser($user);
 
         $em = $this->getDoctrine()->getManager();
-        $workplaces = $em->getRepository('ResumeBundle:Workplace')->findAll();
 
+
+        $workplaces = $em->getRepository('ResumeBundle:Workplace')->findAll();
         $listtitle = $this->getListOfTitleAccordingTypeUser($user->getUsertypeid());
 
         $file = $em->getRepository('ResumeBundle:TeacherFile')->findOneByTeacher($this->getUser()->getUsername());
@@ -174,11 +257,13 @@ class ResumeController extends Controller
         $titles = $em->getRepository('ResumeBundle:Title')->findBy(
         array('userid' => $user->getId()), array('obtaining' => 'DESC'));
 
-        $experiences = $em->getRepository('ResumeBundle:History')->findBy(
-        array('userid' => $user->getId()), array('startdate' => 'DESC'));
+        $experiences = $em->getRepository('ResumeBundle:Experience')->findBy(
+        array('user' => $user), array('startdate' => 'DESC'));
 
-        $message = null;
-        $success = null;
+        $heads = $em->getRepository('ResumeBundle:TeacherDirector')->findBy(
+        array('user' => $user), array('startdate' => 'DESC'));
+
+
         if ($request->isMethod('POST')) {
             $message = $request->request->get('message');
             $success = $request->request->get('success');
@@ -186,16 +271,17 @@ class ResumeController extends Controller
         //
         $formprofbasic = $this->createFormProfForTeacherType(1);
         $formprofhigh = $this->createFormProfForTeacherType(2);
+        $formheadmaster = $this->createFormHeadmaster();
 
         $formexp = $this->createFormExpForTeacherType($titles,$workplaces);
 
         return $this->render('resume/myresume-teacher.html.twig', array(
             'user' => $user,
-            'message' => $message,
-            'success' => $success,
+            'heads' => $heads,
             'titles' => $titles,
             'file' => $file,
             'exps' => $experiences,
+            'new_form_headmaster' => $formheadmaster->createView(),
             'new_form_profbasic' => $formprofbasic->createView(),
             'new_form_profhigh' => $formprofhigh->createView(),
             'new_form_exp' => $formexp->createView(),
@@ -238,17 +324,30 @@ class ResumeController extends Controller
         if ( $user->getId() == $iduser ){
             $em = $this->getDoctrine()->getManager();
             $title = $em->getRepository('ResumeBundle:Title')->findOneBy(
-            array('userid' => $user->getId(),'id' => $id));
+            array('user' => $user,'id' => $id));
 
-            $em->remove($title);
-            $em->flush();
+            try {
+
+              $em->remove($title);
+              $em->flush();
+              $this->addFlash(
+                'success',
+                'La información fue eliminada con exito'
+              );
+
+              //Adding the youngest TITLE to user
+              $titles = $em->getRepository('ResumeBundle:Title')->findBy(
+              array('userid' => $user->getId()), array('obtaining' => 'DESC'));
+              $user->setTitle($titles[0]->getName());
 
 
-            //Adding the youngest TITLE to user
-            $titles = $em->getRepository('ResumeBundle:Title')->findBy(
-            array('userid' => $user->getId()), array('obtaining' => 'DESC'));
-            $user->setTitle($titles[0]->getName());
-
+            }
+            catch(ForeignKeyConstraintViolationException $e){
+              $this->addFlash(
+                'error',
+                'No se puede eliminar el título/profesión ['.$title->getName().']. Este tiene una Experiencia relacionada '
+              );
+            }
 
         }
         if ( $this->get('security.authorization_checker')->isGranted('ROLE_TEACHER') == true ){
@@ -266,20 +365,28 @@ class ResumeController extends Controller
             $user = $this->getUser();
             $this->validationAccessForUser($user);
 
-            if ( $user->getId() == $iduser ){
+            if ( $user->getUsername() == $iduser ){
                 $em = $this->getDoctrine()->getManager();
-                $exp = $em->getRepository('ResumeBundle:History')->findOneBy(
-                array('userid' => $user->getId(),'id' => $id));
+                $exp = $em->getRepository('ResumeBundle:Experience')->findOneBy(
+                array('user' => $user,'id' => $id));
 
                 $em->remove($exp);
                 $em->flush();
+
+                $this->addFlash(
+                  'success',
+                  'La información fue eliminada con exito'
+                );
             }
 
             if ( $this->get('security.authorization_checker')->isGranted('ROLE_TEACHER') == true ){
               return $this->redirectToRoute('resume_resume_teacher');
             }
             else {
-              return $this->redirectToRoute('resume_resume_index');
+              if ( $user->getUsertypeid() == 4)
+                return $this->redirectToRoute('resume_resume_school');
+              else
+                return $this->redirectToRoute('resume_resume_index');
             }
         }
    /**
@@ -362,6 +469,7 @@ class ResumeController extends Controller
       }
       return $this->redirectToRoute('resume_resume_teacher');
     }
+
     /**
      * @Route("/title/new")
      * @Method({"POST"})
@@ -408,6 +516,48 @@ class ResumeController extends Controller
         }
         return $this->redirectToRoute('resume_resume_index');
     }
+
+    /**
+     * @Route("/headmaster/new",name="resume_resume_newheadmaster")
+     * @Method({"POST"})
+     */
+    public function newHeadmasterAction(Request $request){
+        $user = $this->getUser();
+        $this->validationAccessForUser($user);
+
+        if ($request->isMethod('POST')) {
+
+          $workplace = $request->request->get('form')['workplace'];
+          $startdate = $request->request->get('form')['start'];
+          $enddate = $request->request->get('form')['end'];
+          $other = $request->request->get('form')['other'];
+
+          $newHeadmaster = new TeacherDirector();
+
+          $em = $this->getDoctrine()->getManager();
+          $wp = $em->getRepository('ResumeBundle:Workplace')->findOneById($workplace);
+          if($wp){
+              $newHeadmaster->setWorkplace($wp);
+          }
+          else {
+              $newHeadmaster->setOther($other);
+          }
+          $newHeadmaster->setUser($user);
+          $newHeadmaster->setStartdate(new \Datetime($startdate));
+          if ( strlen($enddate) != 0 ){
+            $newHeadmaster->setEnddate(new \Datetime($enddate));
+          }
+
+          $em = $this->getDoctrine()->getManager();
+          $em->persist($newHeadmaster);
+          $em->flush();
+
+
+        }
+        return $this->redirectToRoute('resume_resume_teacher');
+    }
+
+
     /**
      * @Route("/experience/new")
      * @Method({"POST"})
@@ -420,48 +570,47 @@ class ResumeController extends Controller
 
       if ($request->isMethod('POST')) {
         //GETTING INFORMATION FROM POST REQUEST FORM
-        if ( $this->get('security.authorization_checker')->isGranted('ROLE_TEACHER') == true ) {
+        /*if ( $this->get('security.authorization_checker')->isGranted('ROLE_TEACHER') == true ) {
             $titlereq = $request->request->get('form')['title'];
-            $data = $em->getRepository('ResumeBundle:Title')->findOneById($titlereq);
-            $name = $data->getName();
+            $title = $em->getRepository('ResumeBundle:Title')->findOneById($titlereq);
             $wpreq = $request->request->get('form')['workplace'];
-            $wpdata = $em->getRepository('ResumeBundle:Workplace')->findOneById($wpreq);
-        }
-        else {
-            $name = $request->request->get('form')['name'];
+            $wp = $em->getRepository('ResumeBundle:Workplace')->findOneById($wpreq);
+        }*/
 
-        }
+        var_dump($request->request->get('form'));
+        $titlereq = $request->request->get('form')['name'];
+        $title = $em->getRepository('ResumeBundle:Title')->findOneById($titlereq);
+        $wpreq = $request->request->get('form')['workplace'];
+        $wp = $em->getRepository('ResumeBundle:Workplace')->findOneById($wpreq);
         $detail = $request->request->get('form')['detail'];
-        $workplace = $request->request->get('form')['workplace'];
         $other = $request->request->get('form')['other'];
         $startdate = $request->request->get('form')['startdate'];
         $enddate = $request->request->get('form')['enddate'];
 
         //INSERT TITLE
-        $newHistory = new History();
-        $title = $this->getTitleFromUser($user->getId(),$name);
-        $workplace_name = $this->getWorkplaceFromSelection($workplace);
+        $newExp = new Experience();
 
-        if ( $this->get('security.authorization_checker')->isGranted('ROLE_TEACHER') == true ) {
-          $newHistory->setTitle($data);
-          $newHistory->setName($name);
-          $newHistory->setIdtitle($data->getId());
-        }
-        else {
-          $newHistory->setName($title->getName());
-          $newHistory->setIdtitle($title->getId());
-        }
+        $newExp->setTitle($title);
+        $newExp->setDetail($detail);
+        $newExp->setWorkplace($wp);
+        $newExp->setOther($other);
+        #start Date
+        $newExp->setStartdate(new \Datetime('01-'.$startdate));
+        if ( strlen($enddate) != 0 )
+          $newExp->setEnddate(new \Datetime($enddate));
 
-        $newHistory->setDetail($detail);
-        $newHistory->setWorkplace($workplace_name);
-        $newHistory->setOther($other);
-        $newHistory->setStartdate(new \Datetime($startdate));
-        $newHistory->setEnddate(new \Datetime($enddate));
-        $newHistory->setUserid($user->getId());
-
+        $newExp->setUser($user);
         $em = $this->getDoctrine()->getManager();
-        $em->persist($newHistory);
+        $em->persist($newExp);
         $em->flush();
+
+
+        $this->addFlash(
+          'success',
+          'La información fue guardada con exito'
+        );
+
+
       }
 
       if ( $this->get('security.authorization_checker')->isGranted('ROLE_TEACHER') == true ) {
@@ -539,29 +688,19 @@ class ResumeController extends Controller
         }
         return $result;
     }
+
+    /**
+     * Form for create new Assistant Title
+     *
+     */
     protected function createFormProfForAssistantType($idusertype){
       $result = null;
       $classForm = '';
 
       $em = $this->getDoctrine()->getManager();
+      $classForm = 'ResumeBundle:Profession';
+      $choices = $em->getRepository('ResumeBundle:Profession')->findByUsertype($idusertype);
 
-      if ( $idusertype == 1 ){
-          $classForm = 'ResumeBundle:Speciality';
-      }
-      if ( $idusertype == 2 ){
-          $classForm = 'ResumeBundle:Profession';
-      }
-      if ( $idusertype == 3 ){
-          $classForm = 'ResumeBundle:TechnicianMid';
-      }
-      if ( $idusertype == 4 ){
-
-      }
-      //PROFESIONAL
-      if ( $idusertype == 5 ){
-        //$result = $em->getRepository('ResumeBundle:Profession')->findAll();
-        $classForm = 'ResumeBundle:Profession';
-      }
       //FORM
       $data = array();
       $form = $this->createFormBuilder($data)
@@ -570,7 +709,8 @@ class ResumeController extends Controller
          ->add('title', EntityType::class,array('label' => 'Título',
               'required' => false,
               'placeholder' => 'Selecciona una opción',
-              'class' => $classForm))
+              'class' => $classForm,
+              'choices' => $choices,))
          ->add('obtaining',  DateType::class, array(
              'label' => 'Año de Titulación',
              'widget' => 'single_text',
@@ -589,6 +729,70 @@ class ResumeController extends Controller
 
       return $form;
     }
+
+
+
+    /**
+     * Form for create new Teacher Headmaster details
+     *
+     */
+    protected function createFormHeadmaster(){
+      $result = null;
+      $classForm = '';
+      $title = '';
+      $url = '';
+      $year;
+      $em = $this->getDoctrine()->getManager();
+      $classForm = 'ResumeBundle:Workplace';
+      //FORM
+      $data = array();
+      $form = $this->createFormBuilder($data)
+         ->setAction($this->generateUrl('resume_resume_newheadmaster'))
+         ->setMethod('POST')
+         ->add('workplace', EntityType::class,array('label' => 'Establecimiento',
+              'required' => false,
+              'attr' => array(
+               'class' => 'form-control'),
+              'placeholder' => 'Selecciona una opción',
+              'class' => $classForm))
+         ->add('other', TextType::class,array('label' => 'Otro Establecimiento',
+              'attr' => array(
+                'class' => 'form-control'),
+              'required' => false))
+            ->add('start',  DateType::class, array(
+               'required' => true,
+               'label' => 'Fecha de Inicio',
+               'widget' => 'single_text',
+               'format' => 'dd-MM-yyyy',
+               'years' => range(date('Y'), date('Y')-40),
+               'attr' => array(
+               'class' => 'form-control input-inline datepicker',
+               'data-provide' => 'datepicker',
+               'data-date-format' => 'dd-mm-yyyy',
+               'language' => 'es'
+               )
+           ))
+           ->add('end',  DateType::class, array(
+               'required' => false,
+               'label' => 'Fecha de Termino',
+               'widget' => 'single_text',
+               'format' => 'dd-MM-yyyy',
+               'years' => range(date('Y'), date('Y')-40),
+               'attr' => array(
+               'class' => 'form-control input-inline datepicker',
+               'data-provide' => 'datepicker',
+               'data-date-format' => 'dd-mm-yyyy',
+               'language' => 'es'
+               )
+           ))
+         ->getForm();
+
+      return $form;
+    }
+    /**
+     * Form for create new Teacher Title
+     *
+     */
     protected function createFormProfForTeacherType($idtype){
       $result = null;
       $classForm = '';
@@ -638,33 +842,69 @@ class ResumeController extends Controller
 
       return $form;
     }
+
+    /**
+     * Form for create new School Assistant Experience
+     *
+     */
+    protected function createFormExpForSchoolAssistantType($workplaces){
+      $result = null;
+      $classForm = '';
+      $classWorkplace = "ResumeBundle:Workplace";
+      $em = $this->getDoctrine()->getManager();
+
+      $data = array();
+      $form = $this->createFormBuilder($data)
+         ->setAction($this->generateUrl('resume_resume_newschoolexp'))
+         ->setMethod('POST')
+         ->add('detail', TextType::class,array('label' => 'Detalle/Observación',
+                 'required' => true))
+         ->add('workplace',EntityType::class,array('label' => 'Establecimiento',
+               'placeholder' => 'Selecciona una opción',
+               'class' => $classWorkplace,
+               'choices' => $workplaces,
+               'required' => false))
+          ->add('other', TextType::class,array('label' => 'Otro Establecimiento',
+                'required' => false))
+          ->add('startdate',  DateType::class, array(
+             'required' => true,
+             'label' => 'Fecha de Inicio',
+             'widget' => 'single_text',
+             'format' => 'dd-MM-yyyy',
+             'years' => range(date('Y'), date('Y')-40),
+             'attr' => array(
+             'class' => 'form-control input-inline datepicker',
+             'data-provide' => 'datepicker',
+             'data-date-format' => 'dd-mm-yyyy',
+             'language' => 'es'
+             )
+         ))
+         ->add('enddate',  DateType::class, array(
+             'required' => false,
+             'label' => 'Fecha de Termino',
+             'widget' => 'single_text',
+             'format' => 'dd-MM-yyyy',
+             'years' => range(date('Y'), date('Y')-40),
+             'attr' => array(
+             'class' => 'form-control input-inline datepicker',
+             'data-provide' => 'datepicker',
+             'data-date-format' => 'dd-mm-yyyy',
+             'language' => 'es'
+             )
+         ))
+         ->getForm();
+
+      return $form;
+    }
+
+
+
     protected function createFormExpForAssistantType($idusertype,$titles,$workplaces){
       $result = null;
       $classForm = '';
       $classWorkplace = "ResumeBundle:Workplace";
+      $classForm = 'ResumeBundle:Title';
 
-      $em = $this->getDoctrine()->getManager();
-
-      if ( $idusertype == 1 ){
-          $classForm = 'ResumeBundle:Speciality';
-      }
-      if ( $idusertype == 2 ){
-          $classForm = 'ResumeBundle:Profession';
-      }
-      if ( $idusertype == 3 ){
-          $classForm = 'ResumeBundle:Profession';
-      }
-      if ( $idusertype == 4 ){
-
-      }
-      //PROFESIONAL
-      if ( $idusertype == 5 ){
-        //$classForm = 'ResumeBundle:Title';
-      }
-      //FORM
-
-      $classForm = 'ResumeBundle:Profession';
-      
       $data = array();
       $form = $this->createFormBuilder($data)
          ->setAction($this->generateUrl('resume_resume_newexperience'))
@@ -683,7 +923,7 @@ class ResumeController extends Controller
           ->add('other', TextType::class,array('label' => 'Otro Establecimiento',
                 'required' => false))
          ->add('startdate',  DateType::class, array(
-             'required' => false,
+             'required' => true,
              'label' => 'Fecha de Inicio',
              'widget' => 'single_text',
              'format' => 'dd-MM-yyyy',
@@ -696,6 +936,7 @@ class ResumeController extends Controller
              )
          ))
          ->add('enddate',  DateType::class, array(
+             'required' => false,
              'label' => 'Fecha de Termino',
              'widget' => 'single_text',
              'format' => 'dd-MM-yyyy',

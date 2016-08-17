@@ -75,9 +75,13 @@
                         </td>
                         <td>
                         {%if assistant.title is empty %}
-                          <span class="label label-danger">El Asistente de Educación aun no Completa su CV</span>
+                          {% if assistant.usertypeid == 4 %}
+                            {{assistant.usertype | upper}}
+                          {% else %}
+                            <span class="label label-danger">El Asistente de Educación aun no Completa su CV</span>
+                          {% endif %}
                         {% else %}
-                        {{ assistant.title }}
+                          {{ assistant.title }}
                         {% endif %}
                         </td>
                         <td>{{ assistant.email }}</td>

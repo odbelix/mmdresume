@@ -24,9 +24,9 @@ class TeacherDirector
     /**
      * @var string
      *
-     * @ORM\Column(name="workplace", type="string", length=100)
+     * @ORM\Column(name="other", type="string", length=300,nullable=true)
      */
-    private $workplace;
+    private $other;
 
     /**
      * @var \DateTime
@@ -38,9 +38,22 @@ class TeacherDirector
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="enddate", type="date")
+     * @ORM\Column(name="enddate", type="date",nullable=true)
      */
     private $enddate;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Workplace", inversedBy="heads")
+     * @ORM\JoinColumn(name="workplace_id", referencedColumnName="id")
+     */
+    private $workplace;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="heads")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    private $user;
 
 
     /**
@@ -123,5 +136,53 @@ class TeacherDirector
     public function getEnddate()
     {
         return $this->enddate;
+    }
+
+    /**
+     * Set other
+     *
+     * @param string $other
+     *
+     * @return TeacherDirector
+     */
+    public function setOther($other)
+    {
+        $this->other = $other;
+
+        return $this;
+    }
+
+    /**
+     * Get other
+     *
+     * @return string
+     */
+    public function getOther()
+    {
+        return $this->other;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \ResumeBundle\Entity\User $user
+     *
+     * @return TeacherDirector
+     */
+    public function setUser(\ResumeBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \ResumeBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

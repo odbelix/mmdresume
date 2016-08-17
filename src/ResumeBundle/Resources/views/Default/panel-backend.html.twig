@@ -65,14 +65,6 @@
                 <li>
                     <a href="{{path('resume_profile_show')}}"><i class="fa fa-user fa-fw"></i>Mi Perfil</a>
                 </li>
-                {% if is_granted('ROLE_TEACHER') %}
-                <li>
-                    <a href="{{path('resume_default_resume')}}"><i class="fa fa-file-o fa-fw"></i>Mi Curriculum Vitae</a>
-                </li>
-                <li>
-                    <a href="{{path('resume_default_assignments')}}"><i class="fa fa-check-square fa-fw"></i>Mis Asignaciones</a>
-                </li>
-                {% endif %}
                 <li>
                     <a href="{{path('panel_postulant_teachers')}}"><i class="fa fa-bookmark fa-fw"></i>Docentes</a>
                 </li>
@@ -85,7 +77,6 @@
                 <li>
                     <a href="{{path('panel_assigment_index')}}"><i class="fa fa-check-square fa-fw"></i>Asignaciones</a>
                 </li>
-
                 {# ROLE_MANAGER #}
                 {% if is_granted('ROLE_MANAGER') %}
                 <li>
@@ -100,28 +91,9 @@
                         <li>
                             <a href="{{path('panel_profession_index')}}">Títulos / Profesiones</a>
                         </li>
-
-                        <!--
-                        <li>
-                            <a href="{{path('panel_basic_index')}}">Educación Básica</a>
-                        </li>
-                        <li>
-                            <a href="{{path('panel_speciality_index')}}">Educación Media</a>
-                        </li>
-                        <li>
-                            <a href="{{path('panel_profession_index')}}">Profesional</a>
-                        </li>
-                        <li>
-                            <a href="{{path('panel_techniciantop_index')}}">Técnico Nivel Superior</a>
-                        </li>
-                        <li>
-                            <a href="{{path('panel_technicianmid_index')}}">Técnico Nivel Medio</a>
-                        </li>
-                      -->
                     </ul>
-                    </li>
+                </li>
                 {% endif %}
-
                 {# ROLE_DEVELOPER #}
                 {% if is_granted('ROLE_DEVELOPER') %}
                 <li><a href="#"><i class="fa fa-file-code-o fa-fw"></i>Developer<span class="fa arrow"></span></a>
@@ -142,7 +114,7 @@
                 </li>
                 <hr>
                 {% endif %}
-
+                <li><a href="{{path('fos_user_security_logout')}}"><i class="fa fa-sign-out fa-fw"></i> Salir</a></li>
             </ul>
         </div>
         <!-- /.sidebar-collapse -->

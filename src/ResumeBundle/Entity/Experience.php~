@@ -61,6 +61,12 @@ class Experience
      private $user;
 
 
+     /**
+      * @var string
+      *
+      * @ORM\Column(name="other", type="string", length=300, nullable=true)
+      */
+    private $other;
 
 
     /**

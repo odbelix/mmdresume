@@ -62,12 +62,17 @@
                     {% set contactlass = "active" %}
                 {% endif %}
 
+
                 <div class="list-group">
                     <a href="{{path('resume_profile_show')}}" class="list-group-item disable {{profileclass}}">Perfil</a>
                     {% if is_granted('ROLE_TEACHER') %}
                       <a href="{{path('resume_resume_teacher')}}" class="list-group-item {{resumeclass}}">Mi Curriculum Vitae</a>
                     {% else %}
-                      <a href="{{path('resume_resume_index')}}" class="list-group-item {{resumeclass}}">Mi Curriculum Vitae</a>
+                      {% if app.user.usertypeid == 4 %}
+                        <a href="{{path('resume_resume_school')}}" class="list-group-item {{resumeclass}}">Mi Curriculum Vitae</a>
+                      {% else %}
+                        <a href="{{path('resume_resume_index')}}" class="list-group-item {{resumeclass}}">Mi Curriculum Vitae</a>
+                      {% endif %}
                     {% endif %}
                       <a href="#" class="list-group-item {{contactlass}}">Contactanos</a>
                     <a href="{{path('fos_user_security_logout')}}" class="list-group-item">

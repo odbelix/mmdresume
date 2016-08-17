@@ -12,26 +12,28 @@
     </div>
 </div>
 
-{% if message is defined and message is not empty %}
+{% for flash_message in app.session.flashBag.get('error') %}
 <div class="row">
     <div class="col-lg-12">
       <div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        {{message}}.
+        {{flash_message}}.
       </div>
     </div>
 </div>
-{% endif %}
-{% if success is defined and message is not empty %}
+{% endfor %}
+
+{% for flash_message in app.session.flashBag.get('success') %}
 <div class="row">
     <div class="col-lg-12">
       <div class="alert alert-success alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        {{success}}.
+        {{flash_message}}.
       </div>
     </div>
 </div>
-{% endif %}
+{% endfor %}
+
 <div class="row">
     <div class="col-lg-12">
       <h3 class="page-header">Información Personal</h3>
@@ -39,7 +41,8 @@
         <a href="{{path('resume_profile_show')}}" class="btn btn-info">Ver perfil</a>
       </div>
       <div class="caption-full">
-      <!-- TABLE PROFILE -->
+	<!-- CONTENT -->
+	<!-- TABLE PROFILE -->
       <table class="table table-striped table-hover">
         <tr>
           <th>Rut</th>
@@ -57,10 +60,22 @@
           <th>Fecha de nacimiento</th>
           <td>{{user.birthdate|date("d-M-Y")}}</td>
         </tr>
-        <tr>
-          <th colspan="2">Información de Contacto</th>
-        </tr>
-        <tr>
+      </table>
+      <!-- TABLEEND -->
+        <!-- /CONTENT -->
+      </div><!-- /.caption-full -->
+    </div><!-- /.col-lg-12 -->
+</div><!-- /.row .-->
+
+
+<div class="row">
+    <div class="col-lg-12">
+      <h3 class="page-header">Información de Contacto</h3>
+      <div class="caption-full">
+	<!-- CONTENT -->
+	<!-- TABLE PROFILE -->
+      <table class="table table-striped table-hover">
+      <tr>
           <th>Correo</th>
           <td>{{user.email}}</td>
         </tr>
@@ -73,26 +88,23 @@
           <td>{{user.celphone}}</td>
         </tr>
       </table>
-      </div>
       <!-- TABLEEND -->
-    </div>
-</div>
+        <!-- /CONTENT -->
+      </div><!-- /.caption-full -->
+    </div><!-- /.col-lg-12 -->
+</div><!-- /.row .-->
+
 
 <div class="row">
     <div class="col-lg-12">
-      <h3 class="page-header">Autorizaciones de Docencia</h3>
-    </div>
+    <h3 class="page-header">Autorizaciones de Docencia</h3>
     <div class="caption-full">
+      <!-- CONTENT -->
+      <!-- TABLE -->
       <table class="table">
-      <thead>
+      <tbody>
       <tr>
-        <th>Autorización</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Autorización para impartir Religión Catolica</td>
+        <th>Autorización para impartir Religión Catolica</th>
         <td>
         {% if file is defined and file is not empty %}
           {% if file.catholic == 1 %}
@@ -106,7 +118,7 @@
         </td>
       </tr>
       <tr>
-        <td>Autorización para impartir Religión Evangelica</td>
+        <th>Autorización para impartir Religión Evangelica</th>
         <td>
         {% if file is defined and file is not empty %}
           {% if file.evangelical == 1 %}
@@ -121,9 +133,79 @@
       </tr>
     </tbody>
     </table>
-    </div>
-</div>
+      <!-- END TABLE -->
+      <!-- /CONTENT -->
+    </div><!-- /.caption-full -->
+    </div><!-- /.col-lg-12 -->
+</div><!-- /.row .-->
 
+<div class="row">
+<div class="col-lg-12">
+     <h3 class="page-header">Experiencia como Director</h3>
+     <div class="text-right">
+         <button class="btn btn-success" data-toggle="modal" data-target="#ModalHeadmaster">
+          Agregar Años de Dirección
+         </button>
+     </div>
+     <!-- MODAL -->
+  <div class="modal fade" id="ModalHeadmaster" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                              {{ form_start(new_form_headmaster,{'attr':{'onsubmit':'return validateForm()'}})}}
+                              <div class="modal-dialog">
+                                  <div class="modal-content">
+                                      <div class="modal-header">
+                                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                          <h4 class="modal-title" id="myModalLabel">Nueva Experiencia como Director</h4>
+                                      </div>
+                                      <div class="modal-body">
+                                      {{form_widget(new_form_headmaster)}}
+                                      </div>
+                                      <div class="modal-footer">
+                                          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                          <button type="submit" class="btn btn-primary">Guardar</button>
+                                      </div>
+                                  </div>
+                                  <!-- /.modal-content -->
+                              </div>
+                              {{ form_end(new_form_headmaster)}}
+                              <!-- /.modal-dialog -->
+   </div>
+     <!-- ./MODAL -->
+     <div class="caption-full">
+      <!-- CONTENT -->
+      <!-- TABLE -->
+	<table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Periodo</th>
+                  <th>Establecimiento</th>
+                  <th></th>
+                </th>
+              </thead>
+              <tbody>
+                {% for head in heads %}
+                <tr>
+                  <td>{{head.startdate|date('m-Y')}} -
+                  {% if head.enddate is not empty %}
+                    {{head.enddate|date('m-Y')}}
+                  {% else %}
+                    Actualidad
+                  {% endif %}
+                  </td></td>
+                  <td>{{head.workplace}}</td>
+                  <td>
+                    <div class="text-right">
+                      <a class="btn btn-default btn-sm confirmation"  ><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> Eliminar</a>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+      <!-- END TABLE -->
+      <!-- /CONTENT -->
+     </div><!-- /.caption-full -->
+    </div><!-- /.col-lg-12 -->
+</div><!-- /.row .-->
 
 <div class="row">
     <div class="col-lg-12">
@@ -136,7 +218,7 @@
           Agregar Título Educación Media
         </button>
       </div>
-      <!-- MODAL FOR NEW EXP-->
+      <!-- MODALS -->
       <div class="modal fade" id="ModalProfHigh" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
                                 {{ form_start(new_form_profhigh,{'attr':{'onsubmit':'return validateForm(this)'}})}}
                                 <div class="modal-dialog">
@@ -209,9 +291,10 @@
                                 {{ form_end(new_form_profhigh)}}
                                 <!-- /.modal-dialog -->
       </div>
-      <!-- ENDMODAL -->
+      <!-- ./MODALS -->
       <div class="caption-full">
       <!-- CONTENT -->
+      <!-- TABLE -->
       {% if titles|length > 0 %}
         <table class="table table-stripped table-hover">
         <thead>
@@ -236,10 +319,11 @@
         </tbody>
         </table>
       {% endif %}
+      <!-- END TABLE -->
       <!-- /CONTENT -->
-      </div>
-    </div>
-</div>
+      </div><!-- /.caption-full -->
+    </div><!-- /.col-lg-12 -->
+</div><!-- /.row .-->
 <div class="row">
     <div class="col-lg-12">
       <h3 class="page-header">Experiencia</h3>
@@ -248,7 +332,7 @@
           Agregar
         </button>
       </div>
-      <!-- MODAL FOR NEW EXP-->
+      <!-- MODAL -->
       <div class="modal fade" id="ModalExp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
                                 {{ form_start(new_form_exp,{'attr':{'onsubmit':'return validateForm()'}})}}
                                 <div class="modal-dialog">
@@ -297,9 +381,10 @@
                                 {{ form_end(new_form_exp)}}
                                 <!-- /.modal-dialog -->
       </div>
-      <!-- ENDMODAL -->
+      <!-- END MODAL -->
       <div class="caption-full">
       <!-- CONTENT -->
+      <!-- TABLE -->
       {% if exps|length > 0 %}
         <table class="table table-stripped table-hover">
         <thead>
@@ -332,10 +417,11 @@
         </tbody>
         </table>
       {% endif %}
+      <!-- END TABLE -->
       <!-- /CONTENT -->
-      </div>
-    </div>
-</div>
+    </div><!-- /.caption-full -->
+    </div><!-- /.col-lg-12 -->
+</div><!-- /.row .-->
 {% endblock %}
 
 
@@ -347,6 +433,10 @@
 
 $("[name='checkbox-cat']").bootstrapSwitch();
 $("[name='checkbox-eva']").bootstrapSwitch();
+$("[name='checkbox-headmaster']").bootstrapSwitch();
+
+
+
 
 $("[name='checkbox-cat']").on('switchChange.bootstrapSwitch', function () {
     var path = "{{path('resume_resume_catset', { 'value': 'DATA' }) }}"

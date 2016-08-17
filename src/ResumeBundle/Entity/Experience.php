@@ -38,7 +38,7 @@ class Experience
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="enddate", type="date")
+     * @ORM\Column(name="enddate", type="date",nullable=true)
      */
     private $enddate;
 
@@ -61,6 +61,12 @@ class Experience
      private $user;
 
 
+     /**
+      * @var string
+      *
+      * @ORM\Column(name="other", type="string", length=300, nullable=true)
+      */
+    private $other;
 
 
     /**
@@ -215,5 +221,29 @@ class Experience
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set other
+     *
+     * @param string $other
+     *
+     * @return Experience
+     */
+    public function setOther($other)
+    {
+        $this->other = $other;
+
+        return $this;
+    }
+
+    /**
+     * Get other
+     *
+     * @return string
+     */
+    public function getOther()
+    {
+        return $this->other;
     }
 }

@@ -116,6 +116,12 @@ class User extends BaseUser
 
 
     /**
+    * @ORM\OneToMany(targetEntity="TeacherDirector", mappedBy="user")
+    */
+    private $heads;
+
+
+    /**
      * Set firstname
      *
      * @param string $firstname
@@ -551,5 +557,39 @@ class User extends BaseUser
     public function getTitles()
     {
         return $this->titles;
+    }
+
+    /**
+     * Add head
+     *
+     * @param \ResumeBundle\Entity\TeacherDirector $head
+     *
+     * @return User
+     */
+    public function addHead(\ResumeBundle\Entity\TeacherDirector $head)
+    {
+        $this->heads[] = $head;
+
+        return $this;
+    }
+
+    /**
+     * Remove head
+     *
+     * @param \ResumeBundle\Entity\TeacherDirector $head
+     */
+    public function removeHead(\ResumeBundle\Entity\TeacherDirector $head)
+    {
+        $this->heads->removeElement($head);
+    }
+
+    /**
+     * Get heads
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getHeads()
+    {
+        return $this->heads;
     }
 }
