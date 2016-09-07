@@ -32,14 +32,37 @@ class ProfessionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         if ($request->isMethod('POST')) {
-              $logger = $this->get('logger');
-              $logger->info('HIHI');
+              //$logger = $this->get('logger');
+              //$logger->info('HIHI');
 
               $name = $request->request->get('form')['name'];
               $usertype = $request->request->get('form')['usertype'];
+              
+              //CHECKING IF VALUE EXISTS
+              $repo = $this->getDoctrine()
+                       ->getRepository('ResumeBundle:Profession');
+              $query = $repo->createQueryBuilder('p')
+                        ->where('p.name LIKE :name')
+                        ->andwhere('p.usertype = '.$usertype)
+                        ->setParameter('name', '%'.$name.'%')
+                        ->getQuery();
+
+              if ( count($query->getResult()) != 0 ){
+                  $this->addFlash(
+                    'error',
+                    'El valor que se trata de ingresar esta duplicado'
+                  );
+                  return $this->redirectToRoute('panel_profession_index');
+              }
+
+
+
+
 
               $ut = $em->getRepository('ResumeBundle:Usertype')->findOneById($usertype);
               if($ut){
+
+
                 $newprofession = new Profession();
                 $newprofession->setName($name);
                 $newprofession->setUsertype($ut);

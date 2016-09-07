@@ -34,6 +34,23 @@ class WorkplaceController extends Controller
           $address = $request->request->get('workplace')['address'];
           $responsable = $request->request->get('workplace')['responsable'];
 
+          //CHECKING IF VALUE EXISTS
+          $repo = $this->getDoctrine()
+                   ->getRepository('ResumeBundle:Workplace');
+          $query = $repo->createQueryBuilder('p')
+                    ->where('p.name LIKE :name')
+                    ->setParameter('name', '%'.$name.'%')
+                    ->getQuery();
+
+          if ( count($query->getResult()) != 0 ){
+            $this->addFlash(
+              'error',
+              'El valor que se trata de ingresar esta duplicado'
+            );
+            return $this->redirectToRoute('panel_workplace_index');
+          }
+
+
           $wp = new Workplace();
           $wp->setName($name);
           $wp->setAddress($address);

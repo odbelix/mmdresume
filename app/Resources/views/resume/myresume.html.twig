@@ -90,7 +90,8 @@
       </div>
       <!-- MODAL FOR NEW EXP-->
       <div class="modal fade" id="ModalProf" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                                {{ form_start(new_form_prof)}}
+
+                                {{ form_start(new_form_prof,{'attr':{'onsubmit':'return validateForm(this)'}})}}
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -185,8 +186,8 @@
                                             <!-- FORM -->
                                             {{ form_start(new_form_prof)}}
                                             <div class="form-group">
-                                            <label>{{form_label(new_form_exp.name)}}</label>
-                                            {{ form_widget(new_form_exp.name,{ 'attr': {'class': 'form-control'} }) }}
+                                            <label>{{form_label(new_form_exp.title)}}</label>
+                                            {{ form_widget(new_form_exp.title,{ 'attr': {'class': 'form-control'} }) }}
                                             </div>
                                             <div class="form-group">
                                             <label>{{form_label(new_form_exp.detail)}}</label>
@@ -315,5 +316,14 @@ $(function () {
     $('.confirmation').on('click', function () {
         return confirm('¿Esta seguro que desea eliminar?');
     });
+</script>
+<script type="text/javascript">
+  function validateForm(form) {
+  
+    if (form.elements.namedItem("form[title]").value == 0 && form.elements.namedItem("form[other]").value.length < 5 ){
+      alert("Debe seleccionar un Título  o Escribir ingresar Otro");
+      return false;
+    }
+  }
 </script>
 {% endblock%}

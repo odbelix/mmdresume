@@ -125,6 +125,33 @@
     <div id="page-wrapper">
     {% block maincontent %}
 
+    {% if app.user.firstname is empty %}
+      <div class="row">
+          <div class="col-lg-12">
+            <h1 class="page-header">Importante</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+      </div>
+      <!-- /.row -->
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              Completar el Perfil
+            </div>
+            <div class="panel-body">
+                <!-- MESSAGE FOR COMPLETED YOUR PROFILE -->
+                <div class="alert alert-info alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    Hola {{app.user.username}},<br>Antes de continuar debes completar la información personal de tu Perfil. Esto lo puedes realizar <a class="btn btn-default" href="{{path('resume_profile_edit')}}">aquí</a>
+                </div>
+            </div>
+          </div>
+        </div>
+        </div>
+    {% endif %}
+
+
     {% endblock %}
     </div>
     <!-- /#page-wrapper -->

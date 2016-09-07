@@ -81,7 +81,13 @@
         </tr>
         <tr>
           <th>Teléfono</th>
-          <td>{{user.phone}}</td>
+          <td>
+          {% if user.phone is empty%}
+            <b>No registra teléfono de red fija</b>
+          {% else %}
+            {{user.phone}}
+          {% endif %}
+          </td>
         </tr>
         <tr>
           <th>Celular</th>
@@ -398,7 +404,7 @@
         <tbody>
         {% for exp in exps %}
           <tr>
-            <td>{{exp.name}}<br>
+            <td>{{exp.title}}<br>
             {% if exp.workplace is empty %}
               <b>{{exp.other}}</b>
             {% else %}
@@ -409,7 +415,7 @@
             <td>{{exp.detail}}</td>
             <td>
             <div class="text-right">
-              <a class="btn btn-default btn-sm confirmation" href="{{path('resume_resume_deteleexperience', { 'id': exp.id ,'iduser':exp.userid})}}"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> Eliminar</a>
+              <a class="btn btn-default btn-sm confirmation" href="{{path('resume_resume_deteleexperience', { 'id': exp.id ,'iduser':exp.user})}}"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> Eliminar</a>
             </div>
             </td>
           </tr>

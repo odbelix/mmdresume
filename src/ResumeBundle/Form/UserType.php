@@ -5,7 +5,7 @@ namespace ResumeBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class UserType extends AbstractType
@@ -22,13 +22,15 @@ class UserType extends AbstractType
             ->add('middlename')
             ->add('lastname')
             ->add('momlastname')
-            ->add('birthdate', BirthdayType::class, array(
-              'attr' => array(),
-              'placeholder' => array(
-              'day' => 'Dia', 'month' => 'Mes', 'year' => 'Año',
-                              ),
-              'format' => 'dd-MM-yyyy',
-              'label' => 'Fecha de Nacimiento',
+            ->add('birthdate', DateType::class, array(
+                'label' => 'Fecha de Nacimiento',
+                'widget' => 'single_text',
+                'format' => 'dd-MM-yyyy',
+                'attr' => array(
+                'class' => 'form-control input-inline datepicker',
+                'data-provide' => 'datepicker',
+                'data-date-format' => 'dd-mm-yyyy'
+                )
             ))
             ->add('phone')
             ->add('celphone')

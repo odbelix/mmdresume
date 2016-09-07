@@ -143,9 +143,9 @@ class ResumeController extends Controller
         $newExp->setDetail($detail);
         $newExp->setWorkplace($wp);
         $newExp->setOther($other);
-        $newExp->setStartdate(new \Datetime($startdate));
+        $newExp->setStartdate(new \Datetime('01-'.$startdate));
         if ( strlen($enddate) != 0 )
-          $newExp->setEnddate(new \Datetime($enddate));
+          $newExp->setEnddate(new \Datetime('01-'.$enddate));
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($newExp);
@@ -289,30 +289,7 @@ class ResumeController extends Controller
           ));
 
     }
-    /**
-     * @Route("/export/pdf")
-     * @Method({"GET","POST"})
-     */
-    public function exportPDFAction(Request $request){
-        $user = $this->getUser();
-        $this->validationAccessForUser($user);
 
-        $em = $this->getDoctrine()->getManager();
-
-        $titles = $em->getRepository('ResumeBundle:Title')->findBy(
-        array('userid' => $user->getId()), array('obtaining' => 'DESC'));
-
-        $experiences = $em->getRepository('ResumeBundle:History')->findBy(
-        array('userid' => $user->getId()), array('startdate' => 'DESC'));
-
-        $html = $this->render('resume/myresume_pdf.html.twig', array(
-            'user' => $user,
-            'titles' => $titles,
-            'exps' => $experiences,
-        ));
-        $this->returnPDFResponseFromHTML($html,$user);
-        //return $html;
-    }
     /**
      * @Route("/title/delete/{id}/{iduser}")
      * @Method({"GET"})
@@ -482,7 +459,17 @@ class ResumeController extends Controller
 
 
           $title = $request->request->get('form')['title'];
-          $obtaining = $request->request->get('form')['obtaining'];
+          if (array_key_exists('obtaining',$request->request->get('form'))) {
+            $obtaining = $request->request->get('form')['obtaining'];
+          }
+          else {
+              if (array_key_exists('obtainingbasic',$request->request->get('form'))) {
+                  $obtaining = $request->request->get('form')['obtainingbasic'];
+              }
+              else {
+                  $obtaining = $request->request->get('form')['obtaininghigh'];
+              }
+          }
           $other = $request->request->get('form')['other'];
 
           $newTitle = new Title();
@@ -507,6 +494,13 @@ class ResumeController extends Controller
           $em->persist($newTitle);
           $em->flush();
 
+          $this->addFlash(
+            'success',
+            'La información fue guardada con exito'
+          );
+
+
+
           //Adding the youngest TITLE to user
           $titles = $em->getRepository('ResumeBundle:Title')->findBy(
           array('userid' => $user->getId()), array('obtaining' => 'DESC'));
@@ -514,7 +508,15 @@ class ResumeController extends Controller
           $em->persist($user);
           $em->flush();
         }
-        return $this->redirectToRoute('resume_resume_index');
+        if ( $this->get('security.authorization_checker')->isGranted('ROLE_TEACHER') == true ){
+          return $this->redirectToRoute('resume_resume_teacher');
+        }
+        else {
+          if ( $user->getUsertypeid() == 4)
+            return $this->redirectToRoute('resume_resume_school');
+          else
+            return $this->redirectToRoute('resume_resume_index');
+        }
     }
 
     /**
@@ -578,7 +580,7 @@ class ResumeController extends Controller
         }*/
 
         var_dump($request->request->get('form'));
-        $titlereq = $request->request->get('form')['name'];
+        $titlereq = $request->request->get('form')['title'];
         $title = $em->getRepository('ResumeBundle:Title')->findOneById($titlereq);
         $wpreq = $request->request->get('form')['workplace'];
         $wp = $em->getRepository('ResumeBundle:Workplace')->findOneById($wpreq);
@@ -597,7 +599,7 @@ class ResumeController extends Controller
         #start Date
         $newExp->setStartdate(new \Datetime('01-'.$startdate));
         if ( strlen($enddate) != 0 )
-          $newExp->setEnddate(new \Datetime($enddate));
+          $newExp->setEnddate(new \Datetime('01-'.$enddate));
 
         $newExp->setUser($user);
         $em = $this->getDoctrine()->getManager();
@@ -671,16 +673,16 @@ class ResumeController extends Controller
     protected function getTitleFromSelection($idusertype,$idselected){
         $em = $this->getDoctrine()->getManager();
         if ( $idusertype == 1 ){
-          $result = $em->getRepository('ResumeBundle:Speciality')->findOneById($idselected);
+          $result = $em->getRepository('ResumeBundle:Profession')->findOneById($idselected);
         }
         if ( $idusertype == 2 ){
           $result = $em->getRepository('ResumeBundle:Profession')->findOneById($idselected);
         }
         if ( $idusertype == 3 ){
-          $result = $em->getRepository('ResumeBundle:TechnicianMid')->findOneById($idselected);
+          $result = $em->getRepository('ResumeBundle:Profession')->findOneById($idselected);
         }
         if ( $idusertype == 4 ){
-
+          $result = $em->getRepository('ResumeBundle:Profession')->findOneById($idselected);
         }
         //PROFESIONAL
         if ( $idusertype == 5 ){
@@ -801,17 +803,36 @@ class ResumeController extends Controller
       $year;
       $em = $this->getDoctrine()->getManager();
 
+      $classForm = 'ResumeBundle:Profession';
+      $em = $this->getDoctrine()->getManager();
+
+      $url = 'resume_resume_newtitle';
+
       if ( $idtype == 1 ){
-        $classForm = 'ResumeBundle:Basic';
         $title = 'Título Educación Básica';
-        $url = 'resume_resume_newtitleteacherbasic';
         $year = 'obtainingbasic';
+        $repo = $this->getDoctrine()
+                 ->getRepository('ResumeBundle:Profession');
+        $query = $repo->createQueryBuilder('p')
+                  ->where('p.name LIKE :name')
+                  ->andwhere('p.usertype = 1')
+                  ->setParameter('name', '%ásica%')
+                  ->getQuery();
+        $choice = $query->getResult();
       }
       else {
-        $classForm = 'ResumeBundle:Speciality';
         $title = 'Título Educación Media';
-        $url = 'resume_resume_newtitleteacherhigh';
         $year = 'obtaininghigh';
+
+        $repo = $this->getDoctrine()
+                 ->getRepository('ResumeBundle:Profession');
+        $query = $repo->createQueryBuilder('p')
+                  ->where('p.name LIKE :name')
+                  ->andwhere('p.usertype = 1')
+                  ->setParameter('name', '%edia%')
+                  ->getQuery();
+        $choice = $query->getResult();
+
       }
 
       //FORM
@@ -823,7 +844,8 @@ class ResumeController extends Controller
          ->add('title', EntityType::class,array('label' => $title,
               'required' => false,
               'placeholder' => 'Selecciona una opción',
-              'class' => $classForm))
+              'class' => $classForm,
+              'choices' => $choice))
          ->add($year,  DateType::class, array(
              'label' => 'Año de Titulación',
              'widget' => 'single_text',
@@ -909,7 +931,7 @@ class ResumeController extends Controller
       $form = $this->createFormBuilder($data)
          ->setAction($this->generateUrl('resume_resume_newexperience'))
          ->setMethod('POST')
-         ->add('name', EntityType::class,array('label' => 'Título',
+         ->add('title', EntityType::class,array('label' => 'Título',
               'placeholder' => 'Selecciona una opción',
               'class' => $classForm,
               'choices' => $titles))
@@ -953,15 +975,15 @@ class ResumeController extends Controller
       return $form;
     }
     protected function createFormExpForTeacherType($titles,$workplaces){
-      $history = new History();
-      $form = $this->createFormBuilder($history)
+      $exp = new Experience();
+      $form = $this->createFormBuilder($exp)
         ->setAction($this->generateUrl('resume_resume_newexperience'))
         ->setMethod('POST')
         ->add('title', EntityType::class,array('label' => 'Título ',
              'placeholder' => 'Selecciona una opción',
              'class' => 'ResumeBundle:Title',
              'choices' => $titles))
-         ->add('detail', TextareaType::class, array('label' => 'Detalle / Observación',
+         ->add('detail', TextareaType::class, array('label' => 'Detalle / Observación','required' => false,
            'attr' => array('class' => 'tinymce','class' => 'textbox')))
          ->add('workplace',EntityType::class,array('label' => 'Establecimiento',
               'placeholder' => 'Selecciona una opción',
@@ -997,26 +1019,6 @@ class ResumeController extends Controller
         ))
         ->getForm();
       return $form;
-    }
-    private function returnPDFResponseFromHTML($html,$user){
-        //set_time_limit(30); uncomment this line according to your needs
-        // If you are not in a controller, retrieve of some way the service container and then retrieve it
-        //$pdf = $this->container->get("white_october.tcpdf")->create('vertical', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        //if you are in a controlller use :
-        $pdf = $this->get("white_october.tcpdf")->create('vertical', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->SetAuthor('Mobcv - CV Management platform');
-        $pdf->SetTitle(('CV'));
-        $pdf->SetSubject('Mobcv - CV Management platform');
-        $pdf->setFontSubsetting(true);
-        $pdf->SetFont('helvetica', '', 10, '', true);
-        //$pdf->SetMargins(20,20,40, true);
-        $pdf->AddPage();
-
-        //$filename = 'cv_'.$user->getUsername();
-        $filename = 'cv_'.$user->getFirstname();
-
-        $pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
-        $pdf->Output($filename.".pdf",'I'); // This will output the PDF as a response directly
     }
 
 

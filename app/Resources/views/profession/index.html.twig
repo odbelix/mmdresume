@@ -14,6 +14,8 @@
         </div>
         <div class="panel-body">
 
+        {% include "ResumeBundle:Utils:search-table-searchbar.html.twig" %}
+
         <!-- MESSAGES -->
         {% set teacherCollapse = '' %}
         {% set techtopCollapse = '' %}
@@ -108,12 +110,12 @@
                   <div class="panel-heading">
                   <a data-toggle="collapse" data-parent="#accordion" href="#collapseTeacher" aria-expanded="true" class="">Docentes</a>
                   </div>
-                  <div id="collapseTeacher" class="panel-collapse collapse {{teacherCollapse}}" aria-expanded="true" style="">
+                  <div id="collapseTeacher" class="panel-collapse collapse in {{teacherCollapse}}" aria-expanded="true" style="">
 	                   <div class="panel-body">
 
                      <!-- TABLE -->
-                     {% include "ResumeBundle:Utils:search-table-searchbar.html.twig" %}
-                         <table class="table table-striped results">
+
+                         <table class="table table-striped results table-condensed">
                          <thead>
                              <tr>
                                  <th>#</th>
@@ -147,11 +149,10 @@
                   <div class="panel-heading">
                   <a data-toggle="collapse" data-parent="#accordion" href="#collapseProfessional" aria-expanded="true" class="">Profesional</a>
                   </div>
-                  <div id="collapseProfessional" class="panel-collapse collapse {{professionalCollapse}}" aria-expanded="true" style="">
+                  <div id="collapseProfessional" class="panel-collapse collapse in {{professionalCollapse}}" aria-expanded="true" style="">
 	                   <div class="panel-body">
                      <!-- TABLE -->
-                     {% include "ResumeBundle:Utils:search-table-searchbar.html.twig" %}
-                         <table class="table table-striped results">
+                         <table class="table table-striped  table-condensed results">
                          <thead>
                              <tr>
                                  <th>#</th>
@@ -184,11 +185,10 @@
                   <div class="panel-heading">
                   <a data-toggle="collapse" data-parent="#accordion" href="#collapseTechtop" aria-expanded="true" class="">Técnico nivel superior</a>
                   </div>
-                  <div id="collapseTechtop" class="panel-collapse collapse {{techtopCollapse}}" aria-expanded="true" style="">
+                  <div id="collapseTechtop" class="panel-collapse collapse in {{techtopCollapse}}" aria-expanded="true" style="">
 	                   <div class="panel-body">
                      <!-- TABLE -->
-                     {% include "ResumeBundle:Utils:search-table-searchbar.html.twig" %}
-                         <table class="table table-striped results">
+                         <table class="table table-striped table-condensed results">
                          <thead>
                              <tr>
                                  <th>#</th>
@@ -221,11 +221,10 @@
                   <div class="panel-heading">
                   <a data-toggle="collapse" data-parent="#accordion" href="#collapseTechmid" aria-expanded="true" class="">Técnico nivel medio</a>
                   </div>
-                  <div id="collapseTechmid" class="panel-collapse collapse {{techmidCollapse}}" aria-expanded="true" style="">
+                  <div id="collapseTechmid" class="panel-collapse collapse in {{techmidCollapse}}" aria-expanded="true" style="">
 	                   <div class="panel-body">
                      <!-- TABLE -->
-                     {% include "ResumeBundle:Utils:search-table-searchbar.html.twig" %}
-                         <table class="table table-striped results">
+                         <table class="table table-striped table-condensed results">
                          <thead>
                              <tr>
                                  <th>#</th>
